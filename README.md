@@ -1,6 +1,13 @@
 # 5-Stage Pipelined Processor and Assembler
 This repository contains the implementation of a 5-stage pipelined processor and its corresponding assembler, designed primarily in VHDL. The design aims to mimic a real-world CPU pipeline, including components for fetching, decoding, executing, memory access, and write-back stages, along with associated hazard detection and control units.
 
+## Instructions
+First run the below commands to configure modelsim. After that, open the `Processor/Processor.mpf` file with modelsim.
+```bash
+$~ cd ./Processor/
+$~ python modelsim_configure.py
+```
+
 ## Processor Design Overview
 The processor architecture is built around a 5-stage pipeline, allowing for increased instruction throughput. Each stage is designed to perform specific tasks, and files corresponding to each stage are organized within their respective directories.
 
@@ -26,42 +33,42 @@ The processor architecture is built around a 5-stage pipeline, allowing for incr
 
 ## Folder Structure
 ```
-.
-├── Fetch/
-│   ├── PC.vhd  (Program Counter)
-│   ├── Fetch.vhd
-│   └── ...
-├── Decode/
-│   ├── Decode.vhd
-│   ├── Decode0Registers.vhd
-│   ├── Decode1Registers.vhd
-│   ├── Decode2Registers.vhd
-│   ├── Decode3Registers.vhd
-│   ├── RegisterFile.vhd
-│   ├── ControllerUnit.vhd
-│   └── ...
-├── Execute/
-│   ├── Execute.vhd
-│   ├── CCR.vhd  (Condition Code Register)
-│   ├── ALU.vhd  (Arithmetic Logic Unit)
-│   └── ...
-├── Memory/
-│   ├── DataMemory.vhd
-│   ├── SP.vhd  (Stack Pointer)
-│   └── ...
-├── Writeback/
-│   ├── Writeback.vhd
-│   └── ...
-├── HazardDetection/
-│   ├── HDU.vhd  (Hazard Detection Unit)
-│   ├── BranchPrediction.vhd
-│   └── ForwardingUnit.vhd
+├── Processor/
+│   ├── Fetch/
+│   │   ├── PC.vhd  (Program Counter)
+│   │   ├── Fetch.vhd
+│   │   └── ...
+│   ├── Decode/
+│   │   ├── Decode.vhd
+│   │   ├── Decode0Registers.vhd
+│   │   ├── Decode1Registers.vhd
+│   │   ├── Decode2Registers.vhd
+│   │   ├── Decode3Registers.vhd
+│   │   ├── RegisterFile.vhd
+│   │   ├── ControllerUnit.vhd
+│   │   └── ...
+│   ├── Execute/
+│   │   ├── Execute.vhd
+│   │   ├── CCR.vhd  (Condition Code Register)
+│   │   ├── ALU.vhd  (Arithmetic Logic Unit)
+│   │   └── ...
+│   ├── Memory/
+│   │   ├── DataMemory.vhd
+│   │   ├── SP.vhd  (Stack Pointer)
+│   │   └── ...
+│   ├── Writeback/
+│   │   ├── Writeback.vhd
+│   │   └── ...
+│   ├── HazardDetection/
+│   │   ├── HDU.vhd  (Hazard Detection Unit)
+│   │   ├── BranchPrediction.vhd
+│   │   └── ForwardingUnit.vhd
+│   ├── General/
+│   │   ├── Register.vhd
+│   │   └── ... (rest of tiny components)
 ├── Assembler/
 │   ├── assembler.py
 │   └── example.txt
-├── General/
-│   ├── Register.vhd
-│   └── ... (rest of tiny components)
 └── Diagrams/
     ├── ...
     └── ... (rest of deliverables)
