@@ -9,7 +9,9 @@ def sync():
     file_lines.append("Project_Files_Count = {0}\n".format(len(file_paths)))
     for i, path in enumerate(file_paths):
         file_lines.append("Project_File_{0} = {1}\n".format(i, path.replace('\\','/')))
-        file_lines.append("Project_File_P_{0} = {1}\n".format(i, file_config.format(path.split('\\')[-2], i)))
+        parent_folder = path.split('\\')[-2]
+        parent_folder = parent_folder if parent_folder != "Processor" else "{Top Level}"
+        file_lines.append("Project_File_P_{0} = {1}\n".format(i, file_config.format(parent_folder, i)))
     folder_lines = []
     folder_lines.append("Project_Folder_Count = {0}\n".format(len(folders)))
     for i,folder in enumerate(folders):
