@@ -5,7 +5,11 @@ This repository contains the implementation of a 5-stage pipelined processor and
 First run the below commands to configure modelsim. After that, open the `Processor/Processor.mpf` file with modelsim.
 ```bash
 $~ cd ./Processor/
-$~ python modelsim_configure.py
+$~/Processor/ python modelsim_configure.py
+```
+After modelsim opens you should be able to view the folder structure in the `Processor` directory duplicated in modelsim. Run the below command to ensure work library is created in the modelsim terminal
+```bash
+<ModelSim> vlib work
 ```
 
 ## Processor Design Overview
