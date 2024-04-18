@@ -28,12 +28,12 @@ def modify_and_add_to_file(new_content, is_file = True, file_path = glob.glob("*
     # Find the line index where the change should start
     start_index = -1
     for index, line in enumerate(lines):
-        if line.startswith(f"Project_{"Files" if is_file else "Folder"}_Count"):
+        if line.startswith(f"Project_{'Files' if is_file else 'Folder'}_Count"):
             start_index = index
             break
     end_index = -1
     for index, line in enumerate(lines):
-        if line.startswith(f"Project_{"File" if is_file else "Folder"}_P_"):
+        if line.startswith(f"Project_{'File' if is_file else 'Folder'}_P_"):
             end_index = index
     
     if start_index == -1 or end_index == -1:
