@@ -15,7 +15,7 @@ begin
     begin
         if(i_rst='1') then
             outp<=x"00000000";
-        elsif(falling_edge(i_clk)) then
+        elsif(falling_edge(i_clk)) then --again check Regs clk edge
             if(i_outputEnable='1') then
                 outp<=i_result;
             end if;
