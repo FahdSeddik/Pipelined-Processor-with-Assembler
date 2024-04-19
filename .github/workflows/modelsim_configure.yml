@@ -3,10 +3,10 @@ name: Run modelsim_configure.py and Push Changes
 on:
   push:
     branches:
-      - '**'  # This will trigger the workflow on push to any branch
+      - main
   pull_request:
     branches:
-      - main  # This will trigger the workflow on pull requests to main
+      - main
 
 jobs:
   build-and-push:
