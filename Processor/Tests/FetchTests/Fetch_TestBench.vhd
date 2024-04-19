@@ -57,9 +57,9 @@ BEGIN
   -- Clock process definitions
   clk_process : PROCESS
   BEGIN
-    w_i_clk <= '0';
-    WAIT FOR c_clk_period/2;
     w_i_clk <= '1';
+    WAIT FOR c_clk_period/2;
+    w_i_clk <= '0';
     WAIT FOR c_clk_period/2;
   END PROCESS;
 
@@ -88,8 +88,7 @@ BEGIN
     CONSTANT c_instr_w_immediate_address : STD_LOGIC_VECTOR(11 DOWNTO 0) := x"007";
 
   BEGIN
-    WAIT FOR 6 ps; -- Wait for clock to start (Rising edge of clock)
-
+    WAIT FOR 1 ps;
     -- -- Test 1: Basic fetch functionality, normal conditions
     ASSERT w_o_pc = x"00000000" REPORT "Test 1 Failed: PC not updating correctly" SEVERITY ERROR;
     ASSERT w_o_instruction = c_mem_expected(to_integer(unsigned(w_o_pc))) REPORT "Test 1 Failed: Instruction not fetched correctly" SEVERITY ERROR;
