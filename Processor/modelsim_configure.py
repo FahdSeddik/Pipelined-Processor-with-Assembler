@@ -4,8 +4,8 @@ slashes = '\\' if len(os.getcwd().split('\\')) > 1 else '/'
 def sync():
     top_level = os.getcwd().split(slashes)[-1]
     version = get_version()
-    file_paths = count_files_with_extensions()
-    folders = get_folder_hierarchy()
+    file_paths = sorted(count_files_with_extensions())
+    folders = sorted(get_folder_hierarchy())
     file_config = "vhdl_novitalcheck 0 vhdl_nodebug 0 vhdl_1164 1 cover_nofec 0 file_type vhdl group_id 0 vhdl_noload 0 vhdl_synth 0 vhdl_enable0In 0 vhdl_disableopt 0 last_compile 1 folder {0} vhdl_vital 0 cover_excludedefault 0 vhdl_warn1 1 vhdl_warn2 1 vhdl_showsource 0 vhdl_explicit 1 vhdl_warn3 1 vhdl_0InOptions {{}} cover_covercells 0 voptflow 1 vhdl_warn4 1 vhdl_options {{}} cover_optlevel 3 vhdl_warn5 1 toggle - ood 1 compile_to work cover_noshort 0 compile_order {1} cover_nosub 0 dont_compile 0 vhdl_use93 " + version
     file_lines = []
     file_lines.append("Project_Files_Count = {0}\n".format(len(file_paths)))
