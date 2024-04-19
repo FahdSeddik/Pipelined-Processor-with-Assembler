@@ -1,7 +1,8 @@
 import os
 import glob
+slashes = '\\' if len(os.getcwd().split('\\')) > 1 else '/'
 def sync():
-    top_level = os.getcwd().split('\\')[-1]
+    top_level = os.getcwd().split(slashes)[-1]
     version = get_version()
     file_paths = count_files_with_extensions()
     folders = get_folder_hierarchy()
@@ -9,8 +10,8 @@ def sync():
     file_lines = []
     file_lines.append("Project_Files_Count = {0}\n".format(len(file_paths)))
     for i, path in enumerate(file_paths):
-        file_lines.append("Project_File_{0} = {1}\n".format(i, path.replace('\\','/')))
-        parent_folder = path.split('\\')[-2]
+        file_lines.append("Project_File_{0} = {1}\n".format(i, path.replace(slashes,'/')))
+        parent_folder = path.split(slashes)[-2]
         parent_folder = parent_folder if parent_folder != top_level else "{Top Level}"
         file_lines.append("Project_File_P_{0} = {1}\n".format(i, file_config.format(parent_folder, i)))
     folder_lines = []
@@ -94,7 +95,7 @@ def count_files_with_extensions(extensions = ('.do', '.vhd')):
 def get_folder_hierarchy(exclude = ("work")):
     directory = os.getcwd()
     folder_hierarchy = []
-    top_level = os.getcwd().split('\\')[-1]
+    top_level = os.getcwd().split(slashes)[-1]
     # Use os.walk to traverse the directory tree
     for root, dirs, _ in os.walk(directory):
         # Parent folder is the root directory
@@ -115,7 +116,7 @@ def setup():
             for line in f:
                 if "Project_File_" in line and "Project_File_P_" not in line:
                     values = line.split(' = ')
-                    value = '$PWD' + values[1].split("/".join(os.getcwd().split('\\')))[1]
+                    value = '$PWD' + values[1].split("/".join(os.getcwd().split(slashes)))[1]
                     g.write('{0} = {1}\n'.format(values[0].strip(), value.strip()))
                     continue
                 g.write(line.strip() + "\n")
@@ -135,7 +136,7 @@ def fixup():
                     pp = {}
                     prop = line.partition(" = ")[2].split(" ")
                     i = 0
-                    while(i<len(prop)):
+                    while(i<len(prop) - 1):
                         key = prop[i]
                         value = prop[i+1]
                         # A property value that has a space is enclosed in { .. }
