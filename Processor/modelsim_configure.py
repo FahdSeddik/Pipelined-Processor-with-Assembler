@@ -1,16 +1,17 @@
 import os
 import glob
 def sync():
-    # Open and read any ModelSim project file (we normally have one per project)
+    top_level = os.getcwd().split('\\')[-1]
+    version = get_version()
     file_paths = count_files_with_extensions()
     folders = get_folder_hierarchy()
-    file_config = "vhdl_novitalcheck 0 vhdl_nodebug 0 vhdl_1164 1 cover_nofec 0 file_type vhdl group_id 0 vhdl_noload 0 vhdl_synth 0 vhdl_enable0In 0 vhdl_disableopt 0 last_compile 1 folder {0} vhdl_vital 0 cover_excludedefault 0 vhdl_warn1 1 vhdl_warn2 1 vhdl_showsource 0 vhdl_explicit 1 vhdl_warn3 1 vhdl_0InOptions {{}} cover_covercells 0 voptflow 1 vhdl_warn4 1 vhdl_options {{}} cover_optlevel 3 vhdl_warn5 1 toggle - ood 1 compile_to work cover_noshort 0 compile_order {1} cover_nosub 0 dont_compile 0 vhdl_use93 2008"
+    file_config = "vhdl_novitalcheck 0 vhdl_nodebug 0 vhdl_1164 1 cover_nofec 0 file_type vhdl group_id 0 vhdl_noload 0 vhdl_synth 0 vhdl_enable0In 0 vhdl_disableopt 0 last_compile 1 folder {0} vhdl_vital 0 cover_excludedefault 0 vhdl_warn1 1 vhdl_warn2 1 vhdl_showsource 0 vhdl_explicit 1 vhdl_warn3 1 vhdl_0InOptions {{}} cover_covercells 0 voptflow 1 vhdl_warn4 1 vhdl_options {{}} cover_optlevel 3 vhdl_warn5 1 toggle - ood 1 compile_to work cover_noshort 0 compile_order {1} cover_nosub 0 dont_compile 0 vhdl_use93 " + version
     file_lines = []
     file_lines.append("Project_Files_Count = {0}\n".format(len(file_paths)))
     for i, path in enumerate(file_paths):
         file_lines.append("Project_File_{0} = {1}\n".format(i, path.replace('\\','/')))
         parent_folder = path.split('\\')[-2]
-        parent_folder = parent_folder if parent_folder != "Processor" else "{Top Level}"
+        parent_folder = parent_folder if parent_folder != top_level else "{Top Level}"
         file_lines.append("Project_File_P_{0} = {1}\n".format(i, file_config.format(parent_folder, i)))
     folder_lines = []
     folder_lines.append("Project_Folder_Count = {0}\n".format(len(folders)))
@@ -20,8 +21,28 @@ def sync():
     modify_and_add_to_file(file_lines)
     modify_and_add_to_file(folder_lines, False)
 
+def get_version(version = "2008"):
+    file_path = glob.glob("*.mpf")[0]
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+    for i, line in enumerate(lines):
+        if line.startswith('VHDL93'):
+            try:
+                v = line.split(' = ')[1]
+            except:
+                lines[i] = 'VHDL93 = 2008\n'
+                break
+            if v is None or v.strip() != '2002' and v.strip() != '2008':
+                lines[i] = 'VHDL93 = 2008\n'
+                break
+            version = v.strip()
+            break
+    with open(file_path, 'w') as file:
+        file.writelines(lines)
+    return version
 
-def modify_and_add_to_file(new_content, is_file = True, file_path = glob.glob("*.mpf")[0]):
+def modify_and_add_to_file(new_content, is_file = True):
+    file_path = glob.glob("*.mpf")[0]
     with open(file_path, 'r') as file:
         lines = file.readlines()
     
@@ -51,12 +72,13 @@ def modify_and_add_to_file(new_content, is_file = True, file_path = glob.glob("*
     with open(file_path, 'w') as file:
         file.writelines(new_lines)
 
-def count_files_with_extensions(directory = os.getcwd(), extensions = ('.do', '.vhd')):
+def count_files_with_extensions(extensions = ('.do', '.vhd')):
+    directory = os.getcwd()
     # List to hold file paths
     file_paths = []
 
     # Walk through all directories and files in the directory
-    for root, dirs, files in os.walk(directory):
+    for root, _, files in os.walk(directory):
         # Loop through each file in the current root
         for filename in files:
             # Check if the file ends with a specified extension
@@ -69,21 +91,20 @@ def count_files_with_extensions(directory = os.getcwd(), extensions = ('.do', '.
     # Return the count of found files
     return file_paths
 
-def get_folder_hierarchy(directory = os.getcwd(), exclude = ("work")):
+def get_folder_hierarchy(exclude = ("work")):
+    directory = os.getcwd()
     folder_hierarchy = []
-
+    top_level = os.getcwd().split('\\')[-1]
     # Use os.walk to traverse the directory tree
     for root, dirs, _ in os.walk(directory):
         # Parent folder is the root directory
         parent_folder = os.path.basename(root)
-        # Parent directory path
-        parent_directory = os.path.dirname(root)
 
         # Loop through each directory in 'dirs'
         for dir_name in dirs:
             if dir_name in exclude: continue
             # Append tuple (directory name, parent folder name) to the list
-            folder_hierarchy.append((dir_name, parent_folder if parent_folder != "Processor" else "{Top Level}"))
+            folder_hierarchy.append((dir_name, parent_folder if parent_folder != top_level else "{Top Level}"))
 
     return folder_hierarchy
 
@@ -94,7 +115,7 @@ def setup():
             for line in f:
                 if "Project_File_" in line and "Project_File_P_" not in line:
                     values = line.split(' = ')
-                    value = '$PWD' + values[1].split('Pipelined-Processor-with-Assembler/Processor')[1]
+                    value = '$PWD' + values[1].split("/".join(os.getcwd().split('\\')))[1]
                     g.write('{0} = {1}\n'.format(values[0].strip(), value.strip()))
                     continue
                 g.write(line.strip() + "\n")
