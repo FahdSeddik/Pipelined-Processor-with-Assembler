@@ -24,16 +24,12 @@ BEGIN
   BEGIN
     IF i_exception = '1' THEN
       r_pc <= c_exception_handler;
+    ELSIF i_freeze = '1' THEN
+      r_pc <= r_pc; -- freeze -> do nothing
+    ELSIF i_we = '1' THEN
+      r_pc <= i_branch;
     ELSIF rising_edge(i_clk) THEN
-      IF i_freeze = '1' THEN
-        r_pc <= r_pc; -- freeze -> do nothing
-      ELSE
-        IF i_we = '1' THEN
-          r_pc <= i_branch;
-        ELSE
-          r_pc <= STD_LOGIC_VECTOR(unsigned(r_pc) + to_unsigned(1, 32));
-        END IF;
-      END IF;
+      r_pc <= STD_LOGIC_VECTOR(unsigned(r_pc) + to_unsigned(1, 32));
     ELSE
       r_pc <= r_pc;
     END IF;
