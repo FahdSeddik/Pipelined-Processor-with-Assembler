@@ -6,6 +6,8 @@ vcom -2008 Tests/FetchTests/PC_TestBench.vhd
 vsim -gui work.pc_testbench
 
 # add waves
+add wave -position end  sim:/pc_testbench/i_reset
+add wave -position end  sim:/pc_testbench/i_interrupt
 add wave -position end  sim:/pc_testbench/i_branch
 add wave -position end  sim:/pc_testbench/i_we
 add wave -position end  sim:/pc_testbench/i_exception
