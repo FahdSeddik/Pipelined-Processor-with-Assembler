@@ -48,7 +48,8 @@ o_controlSignals(0) <= w_isBranch;
 
 w_aluOP <= "0000";
 w_WB <= "10" WHEN i_opCode(3) = '1' ELSE "00";
-w_stackControl <= "10" WHEN i_opCode = "0001" OR i_opCode = "1001" ELSE "00";
+w_stackControl <= "10" WHEN i_opCode = "0001" OR i_opCode = "1001" ELSE
+                  "01" WHEN i_opCode = "0110" ELSE "00";
 w_memWrite <= '0';
 w_memRead <= '0';
 w_isRti <= '0';

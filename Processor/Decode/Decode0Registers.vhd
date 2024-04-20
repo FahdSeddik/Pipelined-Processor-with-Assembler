@@ -39,7 +39,7 @@ o_controlSignals(1) <= w_isFree;
 o_controlSignals(0) <= w_isBranch;
 
 w_aluOP <= "0000";
-w_WB <= "00";
+w_WB <= "10" WHEN i_opCode = "0001" OR i_opCode = "0011" ELSE "00";
 w_stackControl <=   "01" WHEN i_opCode = "0001" ELSE
                     "11" WHEN i_opCode = "0011" ELSE
                     "00";
