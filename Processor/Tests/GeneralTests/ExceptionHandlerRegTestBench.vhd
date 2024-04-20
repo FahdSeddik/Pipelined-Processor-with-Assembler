@@ -7,7 +7,8 @@ END ExceptionHandlerRegTestBench;
 ARCHITECTURE behavior OF ExceptionHandlerRegTestBench IS
   --Inputs
   SIGNAL i_we : STD_LOGIC := '0';
-  SIGNAL i_EPC : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+  SIGNAL i_EPCMem : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+  SIGNAL i_EPCExec : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
   SIGNAL i_memory_violation : STD_LOGIC := '0';
   SIGNAL i_overflow : STD_LOGIC := '0';
 
@@ -21,7 +22,8 @@ BEGIN
   -- Ipstantiate the Unit Under Test (UUT)
   uut : ENTITY work.ExceptionHandlerReg PORT MAP(
     i_we => i_we,
-    i_EPC => i_EPC,
+    i_EPCMem => i_EPCMem,
+    i_EPCExec => i_EPCExec,
     i_memory_violation => i_memory_violation,
     i_overflow => i_overflow,
     o_EPC => o_EPC,
@@ -38,7 +40,8 @@ BEGIN
 
     -- Case 1: i_memory_violation = '1', i_overflow = '1'
     i_we <= '1';
-    i_EPC <= "00000000000000000000000000000001";
+    i_EPCMem <= "00000000000000000000000000000001";
+    i_EPCExec <= "00000000000000000000000000000001";
     i_memory_violation <= '1';
     i_overflow <= '1';
     WAIT FOR c_clk_period;
@@ -46,7 +49,8 @@ BEGIN
 
     -- Case 2: i_memory_violation = '0', i_overflow = '1'
     i_we <= '1';
-    i_EPC <= "00000000000000000000000000000010";
+    i_EPCMem <= "00000000000000000000000000000010";
+    i_EPCExec <= "00000000000000000000000000000010";
     i_memory_violation <= '0';
     i_overflow <= '1';
     WAIT FOR c_clk_period;
@@ -54,7 +58,8 @@ BEGIN
 
     -- Case 3: i_memory_violation = '1', i_overflow = '0'
     i_we <= '1';
-    i_EPC <= "00000000000000000000000000000011";
+    i_EPCMem <= "00000000000000000000000000000011";
+    i_EPCExec <= "00000000000000000000000000000011";
     i_memory_violation <= '1';
     i_overflow <= '0';
     WAIT FOR c_clk_period;
@@ -62,7 +67,8 @@ BEGIN
 
     -- Case 4: i_memory_violation = '0', i_overflow = '0'
     i_we <= '1';
-    i_EPC <= "00000000000000000000000000000100";
+    i_EPCMem <= "00000000000000000000000000000100";
+    i_EPCExec <= "00000000000000000000000000000100";
     i_memory_violation <= '0';
     i_overflow <= '0';
     WAIT FOR c_clk_period;
@@ -70,7 +76,8 @@ BEGIN
 
     -- Case 5: i_we = '0', i_memory_violation = '1', i_overflow = '1'
     i_we <= '0';
-    i_EPC <= "00000000000000000000000000000001";
+    i_EPCMem <= "00000000000000000000000000000001";
+    i_EPCExec <= "00000000000000000000000000000001";
     i_memory_violation <= '1';
     i_overflow <= '1';
     WAIT FOR c_clk_period;
@@ -78,7 +85,8 @@ BEGIN
 
     -- Case 6: i_we = '0', i_memory_violation = '0', i_overflow = '1'
     i_we <= '0';
-    i_EPC <= "00000000000000000000000000000010";
+    i_EPCMem <= "00000000000000000000000000000010";
+    i_EPCExec <= "00000000000000000000000000000010";
     i_memory_violation <= '0';
     i_overflow <= '1';
     WAIT FOR c_clk_period;
@@ -86,7 +94,8 @@ BEGIN
 
     -- Case 7: i_we = '0', i_memory_violation = '1', i_overflow = '0'
     i_we <= '0';
-    i_EPC <= "00000000000000000000000000000011";
+    i_EPCMem <= "00000000000000000000000000000011";
+    i_EPCExec <= "00000000000000000000000000000011";
     i_memory_violation <= '1';
     i_overflow <= '0';
     WAIT FOR c_clk_period;
@@ -94,7 +103,8 @@ BEGIN
 
     -- Case 8: i_we = '0', i_memory_violation = '0', i_overflow = '0'
     i_we <= '0';
-    i_EPC <= "00000000000000000000000000000100";
+    i_EPCMem <= "00000000000000000000000000000100";
+    i_EPCExec <= "00000000000000000000000000000100";
     i_memory_violation <= '0';
     i_overflow <= '0';
     WAIT FOR c_clk_period;
