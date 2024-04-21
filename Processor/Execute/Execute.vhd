@@ -6,17 +6,14 @@ use IEEE.std_logic_signed.all;
 entity Execute is port(
     i_clk, i_reset: in std_logic;
     --control signals
-    i_WB: in std_logic_vector(1 downto 0);
-    i_memwrite, i_memread,i_isRti: in std_logic;
     i_aluOp: in std_logic_vector(3 downto 0);
     i_inputEnable,i_outputEnable: in std_logic;
-    i_stackControl: in std_logic_vector(1 downto 0);
     i_isImm: in std_logic;
     --input port
     i_inputPort: in std_logic_vector(31 downto 0);
     --data signals from decode
-    i_vRs1,i_vRs2,i_immediate,i_pc: in std_logic_vector(31 downto 0);
-    i_aRd,i_aRs1,i_aRs2: in std_logic_vector(2 downto 0);
+    i_vRs1,i_vRs2,i_immediate: in std_logic_vector(31 downto 0);
+    i_aRs1,i_aRs2: in std_logic_vector(2 downto 0);
     --data signals from memory
     i_vResult_ex,i_vRs2_ex: in std_logic_vector(31 downto 0);
     i_aRd_ex,i_aRs2_ex: in std_logic_vector(2 downto 0);
@@ -25,13 +22,6 @@ entity Execute is port(
     i_vResult_mem,i_vRs2_mem: in std_logic_vector(31 downto 0);
     i_aRd_mem,i_aRs2_mem: in std_logic_vector(2 downto 0);
     i_WB_mem: in std_logic_vector(1 downto 0);
-    --outputs signals
-    o_WB: out std_logic_vector(1 downto 0);
-    o_memwrite, o_memread,o_isRti: out std_logic;
-    o_stackControl: out std_logic_vector(1 downto 0);
-    --output forwarded
-    o_aRd,o_aRs2: out std_logic_vector(2 downto 0);
-    o_pc: out std_logic_vector(31 downto 0);
     --output signal out of here
     o_overflow: out std_logic;
     o_aluResult: out std_logic_vector(31 downto 0);
@@ -93,14 +83,6 @@ begin
     o_aluResult<= s_result_alu;
     o_overflow<= s_flags(3);
     o_vRs2<= s_true_Rs2;
-    o_pc<= i_pc;
-    o_aRd<= i_aRd;
-    o_aRs2<= i_aRs2;
-    o_WB<= i_WB;
-    o_memwrite<= i_memwrite;
-    o_memread<= i_memread;
-    o_isRti<= i_isRti;
-    o_stackControl<= i_stackControl;
 
 
 
