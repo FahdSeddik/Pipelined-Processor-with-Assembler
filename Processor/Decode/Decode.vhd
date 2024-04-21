@@ -25,7 +25,6 @@ o_WB : OUT std_logic_vector(1 downto 0) := (others => '0'); -- o_WB[1]->normal o
 o_stackControl : OUT std_logic_vector(1 downto 0) := (others => '0'); --to determine what types of stack instructions is needed
 o_memWrite : OUT std_logic := '0'; --store
 o_memRead : OUT std_logic := '0'; --load
-o_isRti : OUT std_logic := '0';
 o_inputEnable : OUT std_logic := '0'; --on in
 o_outputEnable : OUT std_logic := '0'; --on out
 o_isImm : OUT std_logic := '0'; -- bit in instruction
@@ -83,28 +82,28 @@ END COMPONENT;
 COMPONENT DECODE_0_REGISTERS IS
 PORT(
 i_opCode : IN std_logic_vector(3 downto 0);
-o_controlSignals : OUT std_logic_vector(15 downto 0)
+o_controlSignals : OUT std_logic_vector(14 downto 0)
 );
 END COMPONENT;
 
 COMPONENT DECODE_1_REGISTERS IS
 PORT(
 i_opCode : IN std_logic_vector(3 downto 0);
-o_controlSignals : OUT std_logic_vector(15 downto 0)
+o_controlSignals : OUT std_logic_vector(14 downto 0)
 );
 END COMPONENT;
 
 COMPONENT DECODE_2_REGISTERS IS
 PORT(
 i_opCode : IN std_logic_vector(3 downto 0);
-o_controlSignals : OUT std_logic_vector(15 downto 0)
+o_controlSignals : OUT std_logic_vector(14 downto 0)
 );
 END COMPONENT;
 
 COMPONENT DECODE_3_REGISTERS IS
 PORT(
 i_opCode : IN std_logic_vector(3 downto 0);
-o_controlSignals : OUT std_logic_vector(15 downto 0)
+o_controlSignals : OUT std_logic_vector(14 downto 0)
 );
 END COMPONENT;
 
@@ -146,12 +145,11 @@ w_controlSignals <= (others => '0') WHEN i_hduClearControl = '1' OR i_exeClearCo
                     w_cS2 WHEN i_instruction(15 downto 14) = "10" ELSE
                     w_cS3;
 
-o_aluOP <= w_controlSignals(15 downto 12);
-o_WB <= w_controlSignals(11 downto 10);
-o_stackControl <= w_controlSignals(9 downto 8);
-o_memWrite <= w_controlSignals(7);
-o_memRead <= w_controlSignals(6);
-o_isRti <= w_controlSignals(5);
+o_aluOP <= w_controlSignals(14 downto 11);
+o_WB <= w_controlSignals(10 downto 9);
+o_stackControl <= w_controlSignals(8 downto 7);
+o_memWrite <= w_controlSignals(6);
+o_memRead <= w_controlSignals(5);
 o_inputEnable <= w_controlSignals(4);
 o_outputEnable <= w_controlSignals(3);
 o_isProtect <= w_controlSignals(2);

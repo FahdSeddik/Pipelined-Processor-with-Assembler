@@ -5,7 +5,7 @@ USE IEEE.numeric_std.all;
 ENTITY DECODE_0_REGISTERS IS
 PORT(
 i_opCode : IN std_logic_vector(3 downto 0);
-o_controlSignals : OUT std_logic_vector(15 downto 0)
+o_controlSignals : OUT std_logic_vector(14 downto 0)
 );
 END ENTITY;
 
@@ -26,12 +26,11 @@ SIGNAL w_isBranch : std_logic := '0';
 -- 2.RTI 0011 -> SP->PC & SP->Flags (second bit)	(will flush)
 -- 3.NOP 0000
 BEGIN
-o_controlSignals(15 downto 12) <= w_aluOP;
-o_controlSignals(11 downto 10) <= w_WB;
-o_controlSignals(9 downto 8) <= w_stackControl;
-o_controlSignals(7) <= w_memWrite;
-o_controlSignals(6) <= w_memRead;
-o_controlSignals(5) <= w_isRti;
+o_controlSignals(14 downto 11) <= w_aluOP;
+o_controlSignals(10 downto 9) <= w_WB;
+o_controlSignals(8 downto 7) <= w_stackControl;
+o_controlSignals(6) <= w_memWrite;
+o_controlSignals(5) <= w_memRead;
 o_controlSignals(4) <= w_inputEnable;
 o_controlSignals(3) <= w_outputEnable;
 o_controlSignals(2) <= w_isProtect;

@@ -5,7 +5,7 @@ USE IEEE.numeric_std.all;
 ENTITY DECODE_2_REGISTERS IS
 PORT(
 i_opCode : IN std_logic_vector(3 downto 0);
-o_controlSignals : OUT std_logic_vector(15 downto 0)
+o_controlSignals : OUT std_logic_vector(14 downto 0)
 );
 END ENTITY;
 
@@ -15,7 +15,6 @@ SIGNAL w_WB : std_logic_vector(1 downto 0) := (others => '0'); -- o_WB[1]->norma
 SIGNAL w_stackControl : std_logic_vector(1 downto 0) := (others => '0'); --to determine what types of stack instructions is needed
 SIGNAL w_memWrite : std_logic := '0'; --store
 SIGNAL w_memRead : std_logic := '0'; --load
-SIGNAL w_isRti : std_logic := '0';
 SIGNAL w_inputEnable : std_logic := '0'; --on in
 SIGNAL w_outputEnable : std_logic := '0'; --on out
 SIGNAL w_isProtect : std_logic := '0';
@@ -34,12 +33,11 @@ SIGNAL w_isBranch : std_logic := '0';
 -- 10.INC 	1001 -> 1010 //
 -- 11.DEC 	1010 -> 1011 //
 BEGIN
-o_controlSignals(15 downto 12) <= w_aluOP;
-o_controlSignals(11 downto 10) <= w_WB;
-o_controlSignals(9 downto 8) <= w_stackControl;
-o_controlSignals(7) <= w_memWrite;
-o_controlSignals(6) <= w_memRead;
-o_controlSignals(5) <= w_isRti;
+o_controlSignals(14 downto 11) <= w_aluOP;
+o_controlSignals(10 downto 9) <= w_WB;
+o_controlSignals(8 downto 7) <= w_stackControl;
+o_controlSignals(6) <= w_memWrite;
+o_controlSignals(5) <= w_memRead;
 o_controlSignals(4) <= w_inputEnable;
 o_controlSignals(3) <= w_outputEnable;
 o_controlSignals(2) <= w_isProtect;
@@ -62,7 +60,6 @@ w_WB <= "10" WHEN   i_opCode = "0111" OR i_opCode = "1000" OR
 w_stackControl <= "00";
 w_memWrite <= '1' WHEN i_opCode = "0110" ELSE '0';
 w_memRead <= '1' WHEN i_opCode = "0100" ELSE '0';
-w_isRti <= '0';
 w_inputEnable <= '0';
 w_outputEnable <= '0';
 w_isProtect <= '0';

@@ -30,7 +30,7 @@ ENTITY ID_EX IS
     o_WB : out std_logic_vector(1 downto 0) := (others => '0');
     o_stackControl : out std_logic_vector(1 downto 0) := (others => '0');
     o_memWrite : out std_logic := '0';
-    o_memRead : out std_logic := '0'; 
+    o_memRead : out std_logic := '0';
     o_inputEnable : out std_logic := '0';
     o_outputEnable : out std_logic := '0'; 
     o_isImm : out std_logic := '0'; 
@@ -81,7 +81,7 @@ BEGIN
       o_WB <= i_WB;
       o_stackControl <= i_stackControl;
       o_memWrite <= i_memWrite;
-      o_memRead <= i_memRead; 
+      o_memRead <= i_memRead;
       o_inputEnable <= i_inputEnable;
       o_outputEnable <= i_outputEnable; 
       o_isImm <= i_isImm;
