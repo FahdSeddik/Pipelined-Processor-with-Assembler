@@ -22,39 +22,36 @@ ENTITY EX_MEM IS
     );
     END ENTITY EX_MEM;
 ARCHITECTURE imp OF EX_MEM IS
-    signal s_WB :  std_logic_vector(1 downto 0) := (others => '0'); -- o_WB[1]->normal o_WB[0]->on if swap
-    signal s_stackControl :  std_logic_vector(1 downto 0) := (others => '0'); --to determine what types of stack instructions is needed
-    signal s_memWrite :  std_logic := '0'; --store
-    signal s_memRead :  std_logic := '0'; --load
-    signal s_isRti :  std_logic := '0';
-    signal s_isProtect :  std_logic := '0';
-    signal s_isFree :  std_logic := '0';
-    -- Input data signals
-    signal s_aluResult :std_logic_vector(31 downto 0) := (others => '0');
-    signal s_vRs2 :  std_logic_vector(31 downto 0) := (others => '0');
-    signal s_aRd :  std_logic_vector(2 downto 0) := (others => '0');
-    signal s_aRs2 :  std_logic_vector(2 downto 0) := (others => '0');
-    signal s_pc :  std_logic_vector(31 downto 0) := (others => '0');
 BEGIN
   PROCESS (ALL)
   BEGIN
     IF i_reset = '1' THEN -- if reset is high
-        -- reset outputs
+        o_WB <= (others => '0');
+        o_stackControl <= (others => '0');
+        o_memWrite <= '0';
+        o_memRead <= '0';
+        o_isRti <= '0';
+        o_isProtect <= '0';
+        o_isFree <= '0';
+        o_aluResult <= (others => '0');
+        o_vRs2 <= (others => '0');
+        o_aRd <= (others => '0');
+        o_aRs2 <= (others => '0');
+        o_pc <= (others => '0');
     ELSIF rising_edge(i_clk) THEN
       IF i_en = '1' THEN
-        s_WB <= i_WB;
-        s_stackControl <= i_stackControl;
-        s_memWrite <= i_memWrite;
-        s_memRead <= i_memRead;
-        s_isRti <= i_isRti;
-        s_isProtect <= i_isProtect;
-        s_isFree <= i_isFree;
-        -- Input data signals
-        s_aluResult <= i_aluResult;
-        s_vRs2 <= i_vRs2;
-        s_aRd <= i_aRd;
-        s_aRs2 <= i_aRs2;
-        s_pc <= i_pc;
+        o_WB <= i_WB;
+        o_stackControl <= i_stackControl;
+        o_memWrite <= i_memWrite;
+        o_memRead <= i_memRead;
+        o_isRti <= i_isRti;
+        o_isProtect <= i_isProtect;
+        o_isFree <= i_isFree;
+        o_aluResult <= i_aluResult;
+        o_vRs2 <= i_vRs2;
+        o_aRd <= i_aRd;
+        o_aRs2 <= i_aRs2;
+        o_pc <= i_pc;
       
       END IF;
     END IF;

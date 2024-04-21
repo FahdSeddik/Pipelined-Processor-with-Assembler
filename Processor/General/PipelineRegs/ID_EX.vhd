@@ -53,72 +53,53 @@ ENTITY ID_EX IS
 END ENTITY ID_EX;
 
 ARCHITECTURE Behavioral OF ID_EX IS
-    signal s_WB : std_logic_vector(1 downto 0) := (others => '0');
-    signal s_stackControl : std_logic_vector(1 downto 0) := (others => '0');
-    signal s_memWrite : std_logic := '0';
-    signal s_memRead : std_logic := '0'; 
-    signal s_isRti : std_logic := '0';
-    signal s_inputEnable : std_logic := '0';
-    signal s_outputEnable : std_logic := '0'; 
-    signal s_isImm : std_logic := '0'; 
-    signal s_isProtect : std_logic := '0';
-    signal s_isFree : std_logic := '0';
-    signal s_isBranch : std_logic := '0';
-    signal s_aluOP : std_logic_vector(3 downto 0) := (others => '0');
-    signal s_vRs1 : std_logic_vector(31 downto 0) := (others => '0');
-    signal s_vRs2 : std_logic_vector(31 downto 0) := (others => '0');
-    signal s_vImmediate : std_logic_vector(31 downto 0) := (others => '0');
-    signal s_aRs1 : std_logic_vector(2 downto 0) := (others => '0');
-    signal s_aRs2 : std_logic_vector(2 downto 0) := (others => '0');
-    signal s_aRd : std_logic_vector(2 downto 0) := (others => '0');
-    signal s_pc : std_logic_vector(31 downto 0) := (others => '0'); 
 BEGIN
   PROCESS (ALL)
   BEGIN
     IF i_reset = '1' THEN -- if reset is high
         -- reset outputs
+      o_pc <= (others => '0');
+      o_WB <= (others => '0');
+      o_stackControl <= (others => '0');
+      o_memWrite <= '0';
+      o_memRead <= '0';
+      o_isRti <= '0';
+      o_inputEnable <= '0';
+      o_outputEnable <= '0';
+      o_isImm <= '0';
+      o_isProtect <= '0';
+      o_isFree <= '0';
+      o_isBranch <= '0';
+      o_aluOP <= (others => '0');
+      o_vRs1 <= (others => '0');
+      o_vRs2 <= (others => '0');
+      o_vImmediate <= (others => '0');
+      o_aRs1 <= (others => '0');
+      o_aRs2 <= (others => '0');
+      o_aRd <= (others => '0');
     ELSIF rising_edge(i_clk) THEN
       IF i_en = '1' THEN
-      s_pc <= i_pc; 
+      o_pc <= i_pc; 
       -- Output ### ADD SEMI-COLON ABOVE
-      s_WB <= i_WB;
-      s_stackControl <= i_stackControl;
-      s_memWrite <= i_memWrite;
-      s_memRead <= i_memRead; 
-      s_isRti <= i_isRti;
-      s_inputEnable <= i_inputEnable;
-      s_outputEnable <= i_outputEnable; 
-      s_isImm <= i_isImm;
-      s_isProtect <= i_isProtect;
-      s_isFree <= i_isFree;
-      s_isBranch <= i_isBranch;
-      s_aluOP <= i_aluOP;
-      s_vRs1 <= i_vRs1;
-      s_vRs2 <= i_vRs2;
-      s_vImmediate <= i_vImmediate;
-      s_aRs1 <= i_aRs1;
-      s_aRs2 <= i_aRs2;
-      s_aRd <= i_aRd;
+      o_WB <= i_WB;
+      o_stackControl <= i_stackControl;
+      o_memWrite <= i_memWrite;
+      o_memRead <= i_memRead; 
+      o_isRti <= i_isRti;
+      o_inputEnable <= i_inputEnable;
+      o_outputEnable <= i_outputEnable; 
+      o_isImm <= i_isImm;
+      o_isProtect <= i_isProtect;
+      o_isFree <= i_isFree;
+      o_isBranch <= i_isBranch;
+      o_aluOP <= i_aluOP;
+      o_vRs1 <= i_vRs1;
+      o_vRs2 <= i_vRs2;
+      o_vImmediate <= i_vImmediate;
+      o_aRs1 <= i_aRs1;
+      o_aRs2 <= i_aRs2;
+      o_aRd <= i_aRd;
       END IF;
     END IF;
   END PROCESS;
-  o_pc <= s_pc; 
-  o_WB <= s_WB;
-  o_stackControl <= s_stackControl;
-  o_memWrite <= s_memWrite;
-  o_memRead <= s_memRead; 
-  o_isRti <= s_isRti;
-  o_inputEnable <= s_inputEnable;
-  o_outputEnable <= s_outputEnable; 
-  o_isImm <= s_isImm;
-  o_isProtect <= s_isProtect;
-  o_isFree <= s_isFree;
-  o_isBranch <= s_isBranch;
-  o_aluOP <= s_aluOP;
-  o_vRs1 <= s_vRs1;
-  o_vRs2 <= s_vRs2;
-  o_vImmediate <= s_vImmediate;
-  o_aRs1 <= s_aRs1;
-  o_aRs2 <= s_aRs2;
-  o_aRd <= s_aRd;
 END ARCHITECTURE Behavioral;
