@@ -29,6 +29,7 @@ ENTITY Memory IS
         o_rdstAddr : OUT std_logic_vector(2 downto 0);
         o_rs2Addr : OUT std_logic_vector(2 downto 0);
         o_rs2Data : OUT std_logic_vector(31 downto 0);
+        o_pc : OUT std_logic_vector(31 downto 0);
         o_exception : OUT std_logic;
         o_isRTI : OUT std_logic
 
@@ -115,5 +116,6 @@ ARCHITECTURE Behavior OF Memory IS
         o_rs2Addr <= i_rs2Addr;
         o_rs2Data <= i_rs2Data;
         o_isRTI <= s_isRTI;
+        o_pc <= i_pc;
 
 END Behavior;
