@@ -15,7 +15,7 @@ ENTITY ID_EX IS
     i_isImm : in std_logic := '0'; -- bit in instruction
     i_isProtect : in std_logic := '0';
     i_isFree : in std_logic := '0';
-    i_isBranch : in std_logic := '0';
+    i_branchControl : in std_logic_vector(1 downto 0) := (others => '0');
     -- Input signals from decode
     i_aluOP : in std_logic_vector(3 downto 0) := (others => '0');
     i_vRs1 : in std_logic_vector(31 downto 0) := (others => '0');
@@ -36,7 +36,7 @@ ENTITY ID_EX IS
     o_isImm : out std_logic := '0'; 
     o_isProtect : out std_logic := '0';
     o_isFree : out std_logic := '0';
-    o_isBranch : out std_logic := '0';
+    o_branchControl : out std_logic_vector(1 downto 0) := (others => '0');
     o_aluOP : out std_logic_vector(3 downto 0) := (others => '0');
     o_vRs1 : out std_logic_vector(31 downto 0) := (others => '0');
     o_vRs2 : out std_logic_vector(31 downto 0) := (others => '0');
@@ -45,8 +45,7 @@ ENTITY ID_EX IS
     o_aRs2 : out std_logic_vector(2 downto 0) := (others => '0');
     o_aRd : out std_logic_vector(2 downto 0) := (others => '0');
     -- Input no-logic wires
-    o_pc : out std_logic_vector(31 downto 0) := (others => '0') -- ### ADD SEMI-COLON
-
+    o_pc : out std_logic_vector(31 downto 0) := (others => '0')
   );
 END ENTITY ID_EX;
 
@@ -66,7 +65,7 @@ BEGIN
       o_isImm <= '0';
       o_isProtect <= '0';
       o_isFree <= '0';
-      o_isBranch <= '0';
+      o_branchControl <= (others => '0');
       o_aluOP <= (others => '0');
       o_vRs1 <= (others => '0');
       o_vRs2 <= (others => '0');
@@ -87,7 +86,7 @@ BEGIN
       o_isImm <= i_isImm;
       o_isProtect <= i_isProtect;
       o_isFree <= i_isFree;
-      o_isBranch <= i_isBranch;
+      o_branchControl <= o_branchControl;
       o_aluOP <= i_aluOP;
       o_vRs1 <= i_vRs1;
       o_vRs2 <= i_vRs2;

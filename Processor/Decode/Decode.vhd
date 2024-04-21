@@ -30,7 +30,7 @@ o_outputEnable : OUT std_logic := '0'; --on out
 o_isImm : OUT std_logic := '0'; -- bit in instruction
 o_isProtect : OUT std_logic := '0';
 o_isFree : OUT std_logic := '0';
-o_isBranch : OUT std_logic := '0';
+o_branchControl : OUT std_logic_vector(1 downto 0) := (others => '0');
 -- Output signals from decode
 o_aluOP : OUT std_logic_vector(3 downto 0) := (others => '0');
 o_vRs1 : OUT std_logic_vector(31 downto 0) := (others => '0');
@@ -82,28 +82,28 @@ END COMPONENT;
 COMPONENT DECODE_0_REGISTERS IS
 PORT(
 i_opCode : IN std_logic_vector(3 downto 0);
-o_controlSignals : OUT std_logic_vector(14 downto 0)
+o_controlSignals : OUT std_logic_vector(15 downto 0)
 );
 END COMPONENT;
 
 COMPONENT DECODE_1_REGISTERS IS
 PORT(
 i_opCode : IN std_logic_vector(3 downto 0);
-o_controlSignals : OUT std_logic_vector(14 downto 0)
+o_controlSignals : OUT std_logic_vector(15 downto 0)
 );
 END COMPONENT;
 
 COMPONENT DECODE_2_REGISTERS IS
 PORT(
 i_opCode : IN std_logic_vector(3 downto 0);
-o_controlSignals : OUT std_logic_vector(14 downto 0)
+o_controlSignals : OUT std_logic_vector(15 downto 0)
 );
 END COMPONENT;
 
 COMPONENT DECODE_3_REGISTERS IS
 PORT(
 i_opCode : IN std_logic_vector(3 downto 0);
-o_controlSignals : OUT std_logic_vector(14 downto 0)
+o_controlSignals : OUT std_logic_vector(15 downto 0)
 );
 END COMPONENT;
 
@@ -116,7 +116,7 @@ w_wbAddress0 <= i_wbAddress1 WHEN i_writeEnable(0) = '1' ELSE
 w_wbAddress1 <= i_wbAddress0 WHEN i_writeEnable(0) = '1' ELSE
                 i_wbAddress1;
 RF : REGISTER_FILE PORT MAP(i_clk, i_reset, i_writeEnable(0), i_writeEnable(1), w_rAddress0, w_rAddress1,
-                            w_wbAddress0, w_wbAddress1, i_data1, i_data0, o_vRs1, o_vRs2); --data1 in 0 and data0 in 1 due writeEnable
+                            w_wbAddress0, w_wbAddress1, i_data0, i_data1, o_vRs1, o_vRs2); --data1 in 0 and data0 in 1 due writeEnable
 
 -- Connect static outputs
 o_aRd <= i_instruction(9 downto 7);
@@ -145,16 +145,16 @@ w_controlSignals <= (others => '0') WHEN i_hduClearControl = '1' OR i_exeClearCo
                     w_cS2 WHEN i_instruction(15 downto 14) = "10" ELSE
                     w_cS3;
 
-o_aluOP <= w_controlSignals(14 downto 11);
-o_WB <= w_controlSignals(10 downto 9);
-o_stackControl <= w_controlSignals(8 downto 7);
-o_memWrite <= w_controlSignals(6);
-o_memRead <= w_controlSignals(5);
-o_inputEnable <= w_controlSignals(4);
-o_outputEnable <= w_controlSignals(3);
-o_isProtect <= w_controlSignals(2);
-o_isFree <= w_controlSignals(1);
-o_isBranch <= w_controlSignals(0);
+o_aluOP <= w_controlSignals(15 downto 12);
+o_WB <= w_controlSignals(11 downto 10);
+o_stackControl <= w_controlSignals(9 downto 8);
+o_memWrite <= w_controlSignals(7);
+o_memRead <= w_controlSignals(6);
+o_inputEnable <= w_controlSignals(5);
+o_outputEnable <= w_controlSignals(4);
+o_isProtect <= w_controlSignals(3);
+o_isFree <= w_controlSignals(2);
+o_branchControl <= w_controlSignals(1 downto 0);
 
 END ARCHITECTURE;
 

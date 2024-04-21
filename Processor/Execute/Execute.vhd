@@ -24,10 +24,10 @@ entity Execute is port(
     i_WB_mem: in std_logic_vector(1 downto 0);
     --output signal out of here
     o_overflow: out std_logic;
-    o_aluResult: out std_logic_vector(31 downto 0);
     o_result: out std_logic_vector(31 downto 0);
     o_output: out std_logic_vector(31 downto 0);
-    o_vRs2: out std_logic_vector(31 downto 0)
+    o_vRs2: out std_logic_vector(31 downto 0);
+    o_flags : out std_logic_vector(3 downto 0)
 );
 end entity Execute;
 architecture imp of Execute is
@@ -80,10 +80,9 @@ begin
                     i_vRs2_mem;
     s_second_operand <= s_true_Rs2 when i_isImm = '0' else i_immediate;--Immediate or Rs2 mux
     o_result<= s_result_alu when i_inputEnable = '0' else i_inputPort; --Output mux
-    o_aluResult<= s_result_alu;
     o_overflow<= s_flags(3);
     o_vRs2<= s_true_Rs2;
-
+    o_flags <= s_flags;
 
 
 end imp;
