@@ -5,7 +5,7 @@ ENTITY BranchControl IS
   PORT (
     -- inputs
     i_branch_control : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := "00"; -- a branch in
-    -- 00 = no branch, 01 = branch always (jmp), 10 = branch if equal (JZ), 11 = XXX
+    -- 00 = no branch, 01 = branch always (jmp), 10 = branch if equal (JZ), 11 = call
     i_branch_adress : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0'); -- adress to jump
     i_z_flag : IN STD_LOGIC := '0';
     -- outputs

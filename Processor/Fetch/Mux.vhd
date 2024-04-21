@@ -11,6 +11,6 @@ END Mux;
 
 ARCHITECTURE behavioral OF Mux IS
 BEGIN
-  o_output <= i_input WHEN i_selector = '0' ELSE
-    (OTHERS => '0');
+  o_output <= (OTHERS => '0') WHEN i_selector = '1' ELSE
+    i_input;
 END behavioral;

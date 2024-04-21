@@ -1,13 +1,15 @@
 # compilation
 vcom -2008 Fetch/PC.vhd
 vcom -2008 Fetch/mux.vhd
-vcom -2008 Fetch/IF_ID.vhd
+vcom -2008 General/PipelineRegs/IF_ID.vhd
 vcom -2008 Fetch/ImmediateHandler.vhd
 vcom -2008 Fetch/InstructionMemory.vhd
 vcom -2008 Fetch/Fetch.vhd
 
 # simulation
 vsim -gui work.Fetch
+
+
 
 # add waves
 ### inputs ###

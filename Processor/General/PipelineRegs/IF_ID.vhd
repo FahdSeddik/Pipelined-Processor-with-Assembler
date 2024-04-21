@@ -6,7 +6,7 @@ ENTITY IF_ID IS
   PORT (
     -- inputs
     i_clk : IN STD_LOGIC := '0';
-    i_reset : IN STD_LOGIC := '0'; -- reset signal
+    i_reset : IN STD_LOGIC := '0';
     i_pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     i_en : IN STD_LOGIC := '0';
     i_instruction : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');

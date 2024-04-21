@@ -4,8 +4,10 @@ USE ieee.numeric_std.ALL;
 
 ENTITY ImmediateHandler IS
   PORT (
+    -- inputs
     i_clk : IN STD_LOGIC := '0';
     i_input : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
+    -- outputs
     o_instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
     o_immediate : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0')
   );

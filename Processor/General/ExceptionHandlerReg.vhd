@@ -4,7 +4,7 @@ USE IEEE.STD_LOGIC_1164.ALL;
 ENTITY ExceptionHandlerReg IS
   PORT (
     -- inputs
-    i_we : IN STD_LOGIC;
+    i_we : IN STD_LOGIC := '0';
     i_EPCMem : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0'); -- EPC for memory violation
     i_EPCExec : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0'); -- EPC for exception
     i_memory_violation : IN STD_LOGIC := '0';
