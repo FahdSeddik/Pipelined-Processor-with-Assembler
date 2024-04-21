@@ -83,7 +83,7 @@ ARCHITECTURE Behavior OF Memory IS
         s_dataIn <= i_pc when s_stackControl = "01"
                     -- flag register (4 bits) padded with 28 zeros
                     else (0 to 27 => '0') & i_flag when s_stackControl = "11"
-                    else i_result;
+                    else i_rs2Data;
                      
 
 
