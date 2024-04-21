@@ -33,12 +33,12 @@ BEGIN
     IF i_reset = '1' THEN -- if reset is high
         -- reset all the registers
         o_memRead <= '0';
-        o_writeBack <= '0';
-        o_readData <= '0';
-        o_result <= '0';
-        o_rdstAddr <= '0';
-        o_rs2Addr <= '0';
-        o_rs2Data <= '0';
+        o_writeBack <= (OTHERS => '0');
+        o_readData <= (OTHERS => '0');
+        o_result <= (OTHERS => '0');
+        o_rdstAddr <= (OTHERS => '0');
+        o_rs2Addr <= (OTHERS => '0');
+        o_rs2Data <= (OTHERS => '0');
     ELSIF rising_edge(i_clk) THEN
         IF i_en = '1' THEN 
             -- if enable is high
