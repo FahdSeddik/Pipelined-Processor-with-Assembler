@@ -2,14 +2,14 @@ LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.all;
 
-ENTITY DECODE_2_REGISTERS IS
+ENTITY DECODE_3_REGISTERS IS
 PORT(
 i_opCode : IN std_logic_vector(3 downto 0);
 o_controlSignals : OUT std_logic_vector(15 downto 0)
 );
 END ENTITY;
 
-ARCHITECTURE struct OF DECODE_2_REGISTERS IS
+ARCHITECTURE struct OF DECODE_3_REGISTERS IS
 SIGNAL w_aluOP : std_logic_vector(3 downto 0) := (others => '0');
 SIGNAL w_WB : std_logic_vector(1 downto 0) := (others => '0'); -- o_WB[1]->normal o_WB[0]->on if swap
 SIGNAL w_stackControl : std_logic_vector(1 downto 0) := (others => '0'); --to determine what types of stack instructions is needed

@@ -74,8 +74,8 @@ i_wAddress1 : IN std_logic_vector(2 downto 0);
 i_wData0 : IN std_logic_vector(31 downto 0);
 i_wData1 : IN std_logic_vector(31 downto 0);
 -- Output
-o_rData0 : IN std_logic_vector(31 downto 0);
-o_rData1 : IN std_logic_vector(31 downto 0)
+o_rData0 : OUT std_logic_vector(31 downto 0);
+o_rData1 : OUT std_logic_vector(31 downto 0)
 );
 END COMPONENT;
 
@@ -115,8 +115,20 @@ w_wbAddress0 <= i_wbAddress1 WHEN i_writeEnable(0) = '1' ELSE
                 i_wbAddress0;
 w_wbAddress1 <= i_wbAddress0 WHEN i_writeEnable(0) = '1' ELSE
                 i_wbAddress1;
-RF : REGISTER_FILE PORT MAP(i_clk, i_reset, i_writeEnable(0), i_writeEnable(1), w_rAddress0, w_rAddress1,
-                            w_wbAddress0, w_wbAddress1, i_data0, i_data1, o_vRs1, o_vRs2); --data1 in 0 and data0 in 1 due writeEnable
+RF : REGISTER_FILE PORT MAP(
+    i_clk,
+    i_reset,
+    i_writeEnable(0),
+    i_writeEnable(1),
+    w_rAddress0,
+    w_rAddress1,
+    w_wbAddress0,
+    w_wbAddress1,
+    i_data0,
+    i_data1,
+    o_vRs1,
+    o_vRs2
+); --data1 in 0 and data0 in 1 due writeEnable
 
 -- Connect static outputs
 o_aRd <= i_instruction(9 downto 7);
