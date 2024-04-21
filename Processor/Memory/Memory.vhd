@@ -12,8 +12,7 @@ ENTITY Memory IS
         i_writeBack : IN std_logic_vector(1 downto 0); -- i_writeEnable[1]->normal i_writeEnable[0]->on if swap
         i_protect : IN std_logic;
         i_free : IN std_logic;
-        i_stackControl : OUT std_logic_vector(1 downto 0);
-        i_flush : IN std_logic;
+        i_stackControl : in std_logic_vector(1 downto 0);
         -- data
         i_result : IN std_logic_vector(31 downto 0); -- ALU result
         i_rdstAddr : IN std_logic_vector(2 downto 0);

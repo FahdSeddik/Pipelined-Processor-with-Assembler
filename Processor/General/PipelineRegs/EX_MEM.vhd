@@ -10,7 +10,6 @@ ENTITY EX_MEM IS
     i_stackControl : in std_logic_vector(1 downto 0) := (others => '0'); --to determine what types of stack instructions is needed
     i_memWrite : in std_logic := '0'; --store
     i_memRead : in std_logic := '0'; --load
-    i_isRti : in std_logic := '0';
     i_isProtect : in std_logic := '0';
     i_isFree : in std_logic := '0';
     -- Input data signals
@@ -18,7 +17,22 @@ ENTITY EX_MEM IS
     i_vRs2 : in std_logic_vector(31 downto 0) := (others => '0');
     i_aRd : in std_logic_vector(2 downto 0) := (others => '0');
     i_aRs2 : in std_logic_vector(2 downto 0) := (others => '0');
-    i_pc : in std_logic_vector(31 downto 0) := (others => '0')
+    i_pc : in std_logic_vector(31 downto 0) := (others => '0');
+    i_flag : in std_logic_vector(3 downto 0) := (others => '0');
+    --output signals
+    o_memRead : out std_logic;
+    o_memWrite : out std_logic;
+    o_WB : out std_logic_vector(1 downto 0); -- i_writeEnable[1]->normal i_writeEnable[0]->on if swap
+    o_isProtect : out std_logic;
+    o_isFree : out std_logic;
+    o_stackControl : OUT std_logic_vector(1 downto 0);
+    -- data
+    o_aluResult : out std_logic_vector(31 downto 0); -- ALU result
+    o_vRs2 : out std_logic_vector(31 downto 0);
+    o_aRd : out std_logic_vector(2 downto 0);
+    o_aRs2 : out std_logic_vector(2 downto 0);
+    o_pc : out std_logic_vector(31 downto 0);
+    o_flag : out std_logic_vector(3 downto 0)
     );
     END ENTITY EX_MEM;
 ARCHITECTURE imp OF EX_MEM IS
@@ -30,7 +44,6 @@ BEGIN
         o_stackControl <= (others => '0');
         o_memWrite <= '0';
         o_memRead <= '0';
-        o_isRti <= '0';
         o_isProtect <= '0';
         o_isFree <= '0';
         o_aluResult <= (others => '0');
@@ -38,13 +51,13 @@ BEGIN
         o_aRd <= (others => '0');
         o_aRs2 <= (others => '0');
         o_pc <= (others => '0');
+        o_flag <= (others => '0');
     ELSIF rising_edge(i_clk) THEN
       IF i_en = '1' THEN
         o_WB <= i_WB;
         o_stackControl <= i_stackControl;
         o_memWrite <= i_memWrite;
         o_memRead <= i_memRead;
-        o_isRti <= i_isRti;
         o_isProtect <= i_isProtect;
         o_isFree <= i_isFree;
         o_aluResult <= i_aluResult;
@@ -52,6 +65,7 @@ BEGIN
         o_aRd <= i_aRd;
         o_aRs2 <= i_aRs2;
         o_pc <= i_pc;
+        o_flag <= i_flag;
       
       END IF;
     END IF;

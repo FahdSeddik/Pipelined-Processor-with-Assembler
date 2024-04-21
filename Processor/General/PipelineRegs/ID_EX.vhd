@@ -10,7 +10,6 @@ ENTITY ID_EX IS
     i_stackControl : in std_logic_vector(1 downto 0) := (others => '0'); --to determine what types of stack instructions is needed
     i_memWrite : in std_logic := '0'; --store
     i_memRead : in std_logic := '0'; --load
-    i_isRti : in std_logic := '0';
     i_inputEnable : in std_logic := '0'; --on in
     i_outputEnable : in std_logic := '0'; --on out
     i_isImm : in std_logic := '0'; -- bit in instruction
@@ -32,7 +31,6 @@ ENTITY ID_EX IS
     o_stackControl : out std_logic_vector(1 downto 0) := (others => '0');
     o_memWrite : out std_logic := '0';
     o_memRead : out std_logic := '0'; 
-    o_isRti : out std_logic := '0';
     o_inputEnable : out std_logic := '0';
     o_outputEnable : out std_logic := '0'; 
     o_isImm : out std_logic := '0'; 
@@ -63,7 +61,6 @@ BEGIN
       o_stackControl <= (others => '0');
       o_memWrite <= '0';
       o_memRead <= '0';
-      o_isRti <= '0';
       o_inputEnable <= '0';
       o_outputEnable <= '0';
       o_isImm <= '0';
@@ -85,7 +82,6 @@ BEGIN
       o_stackControl <= i_stackControl;
       o_memWrite <= i_memWrite;
       o_memRead <= i_memRead; 
-      o_isRti <= i_isRti;
       o_inputEnable <= i_inputEnable;
       o_outputEnable <= i_outputEnable; 
       o_isImm <= i_isImm;
