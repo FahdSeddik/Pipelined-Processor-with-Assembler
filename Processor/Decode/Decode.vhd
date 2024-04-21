@@ -4,44 +4,44 @@ USE IEEE.numeric_std.all;
 
 ENTITY DECODE IS
 PORT(
-i_clk : IN std_logic;
-i_reset : IN std_logic;
+i_clk : IN std_logic := '0';
+i_reset : IN std_logic := '0';
 -- Input from fetch
-i_instruction : IN std_logic_vector(15 downto 0); --for decoding
-i_immediate : IN std_logic_vector(15 downto 0); --for sign extend
-i_pc : IN std_logic_vector(31 downto 0); --no-logic signal
+i_instruction : IN std_logic_vector(15 downto 0) := (others => '0'); --for decoding
+i_immediate : IN std_logic_vector(15 downto 0) := (others => '0'); --for sign extend
+i_pc : IN std_logic_vector(31 downto 0) := (others => '0'); --no-logic signal
 -- Input from writeback (for register file)
-i_writeEnable : IN std_logic_vector(1 downto 0); -- i_writeEnable[1]->normal i_writeEnable[0]->on if swap
-i_data0 : IN std_logic_vector(31 downto 0); --normally if wb[1]
-i_data1 : IN std_logic_vector(31 downto 0); --to address 0 and 0 to address 1 if swap
-i_wbAddress0 : IN std_logic_vector(2 downto 0);
-i_wbAddress1 : IN std_logic_vector(2 downto 0);
+i_writeEnable : IN std_logic_vector(1 downto 0) := (others => '0'); -- i_writeEnable[1]->normal i_writeEnable[0]->on if swap
+i_data0 : IN std_logic_vector(31 downto 0) := (others => '0'); --normally if wb[1]
+i_data1 : IN std_logic_vector(31 downto 0) := (others => '0'); --to address 0 and 0 to address 1 if swap
+i_wbAddress0 : IN std_logic_vector(2 downto 0) := (others => '0');
+i_wbAddress1 : IN std_logic_vector(2 downto 0) := (others => '0');
 -- Input from HDU
-i_hduClearControl : IN std_logic;
+i_hduClearControl : IN std_logic := '0';
 -- Input from execution
-i_exeClearControl : IN std_logic;
+i_exeClearControl : IN std_logic := '0';
 -- Output control signals
-o_WB : OUT std_logic_vector(1 downto 0); -- o_WB[1]->normal o_WB[0]->on if swap
-o_stackControl : OUT std_logic_vector(1 downto 0); --to determine what types of stack instructions is needed
-o_memWrite : OUT std_logic; --store
-o_memRead : OUT std_logic; --load
-o_isRti : OUT std_logic;
-o_inputEnable : OUT std_logic; --on in
-o_outputEnable : OUT std_logic; --on out
-o_isImm : OUT std_logic; -- bit in instruction
-o_isProtect : OUT std_logic;
-o_isFree : OUT std_logic;
-o_isBranch : OUT std_logic;
+o_WB : OUT std_logic_vector(1 downto 0) := (others => '0'); -- o_WB[1]->normal o_WB[0]->on if swap
+o_stackControl : OUT std_logic_vector(1 downto 0) := (others => '0'); --to determine what types of stack instructions is needed
+o_memWrite : OUT std_logic := '0'; --store
+o_memRead : OUT std_logic := '0'; --load
+o_isRti : OUT std_logic := '0';
+o_inputEnable : OUT std_logic := '0'; --on in
+o_outputEnable : OUT std_logic := '0'; --on out
+o_isImm : OUT std_logic := '0'; -- bit in instruction
+o_isProtect : OUT std_logic := '0';
+o_isFree : OUT std_logic := '0';
+o_isBranch : OUT std_logic := '0';
 -- Output signals from decode
-o_aluOP : OUT std_logic_vector(3 downto 0);
-o_vRs1 : OUT std_logic_vector(31 downto 0);
-o_vRs2 : OUT std_logic_vector(31 downto 0);
-o_vImmediate : OUT std_logic_vector(31 downto 0);
-o_aRs1 : OUT std_logic_vector(2 downto 0);
-o_aRs2 : OUT std_logic_vector(2 downto 0);
-o_aRd : OUT std_logic_vector(2 downto 0);
+o_aluOP : OUT std_logic_vector(3 downto 0) := (others => '0');
+o_vRs1 : OUT std_logic_vector(31 downto 0) := (others => '0');
+o_vRs2 : OUT std_logic_vector(31 downto 0) := (others => '0');
+o_vImmediate : OUT std_logic_vector(31 downto 0) := (others => '0');
+o_aRs1 : OUT std_logic_vector(2 downto 0) := (others => '0');
+o_aRs2 : OUT std_logic_vector(2 downto 0) := (others => '0');
+o_aRd : OUT std_logic_vector(2 downto 0) := (others => '0');
 -- Output no-logic wires
-o_pc : OUT std_logic_vector(31 downto 0)
+o_pc : OUT std_logic_vector(31 downto 0) := (others => '0')
 );
 -- Instruction understanding
 --31. .... ... ... ... .   .... ..98 7654 3210
