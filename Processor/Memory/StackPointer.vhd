@@ -18,11 +18,13 @@ BEGIN
     BEGIN
         IF i_rst = '1' THEN
             -- initial value of SP is (2^12-1)
-            o_q <= x"00000FFD";
+            o_q <= x"00000FFE";
         ELSIF rising_edge(i_clk) THEN
             IF i_push = '1' THEN
                 o_q <= o_q - 2;
-            ELSIF i_pop = '1' THEN
+            END IF;
+        ELSIF falling_edge(i_clk) THEN
+            IF i_pop = '1' THEN
                 o_q <= o_q + 2;
             END IF;
         END IF;
