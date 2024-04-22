@@ -7,13 +7,6 @@ add wave -position end  sim:/processor/i_reset
 add wave -position end  sim:/processor/i_port
 add wave -position end  sim:/processor/o_port
 
-add wave -position 58  sim:/processor/E/alu1/i_a
-add wave -position 59  sim:/processor/E/alu1/i_b
-add wave -position 60  sim:/processor/E/alu1/i_op
-add wave -position 61  sim:/processor/E/alu1/o_result
-add wave -position 62  sim:/processor/E/alu1/o_flags
-add wave -position 63  sim:/processor/E/alu1/temp
-
 add wave -position end  sim:/processor/D/RF/i_clk
 add wave -position end  sim:/processor/D/RF/i_reset
 add wave -position end  sim:/processor/D/RF/i_we0

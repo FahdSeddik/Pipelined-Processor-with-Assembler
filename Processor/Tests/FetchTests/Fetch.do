@@ -18,7 +18,6 @@ add wave -position end  sim:/fetch/i_we
 add wave -position end  sim:/fetch/i_exception
 add wave -position end  sim:/fetch/i_freeze
 add wave -position end  sim:/fetch/i_clk
-add wave -position end  sim:/fetch/i_reset
 ### fetch outputs ###
 add wave -position end  sim:/fetch/o_pc
 add wave -position end  sim:/fetch/o_instruction
