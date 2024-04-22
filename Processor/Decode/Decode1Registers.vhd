@@ -51,7 +51,7 @@ w_stackControl <= "10" WHEN i_opCode = "0001" OR i_opCode = "1001" ELSE
 w_memWrite <= '0';
 w_memRead <= '0';
 w_inputEnable <= '1' WHEN i_opCode = "1000" ELSE '0';
-w_outputEnable <= '1' WHEN i_opCode = "0000" ELSE '1';
+w_outputEnable <= '1' WHEN i_opCode = "0000" ELSE '0';
 w_isProtect <= '1' WHEN i_opCode = "0010" ELSE '0';
 w_isFree <= '1' WHEN i_opCode = "0011" ELSE '0';
 w_branchControl <=  "01" WHEN i_opCode = "0101" ELSE
