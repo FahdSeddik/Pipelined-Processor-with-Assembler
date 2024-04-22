@@ -27,7 +27,7 @@ BEGIN
     IF falling_edge(i_clk) THEN
       CASE r_state IS
         WHEN instruction_wait =>
-          IF i_input(15) = '1' THEN -- has immediate
+          IF i_input(0) = '1' THEN -- has immediate
             r_temp <= i_input;
             r_instruction <= (OTHERS => '0'); -- nop
             r_immediate <= (OTHERS => '0');
