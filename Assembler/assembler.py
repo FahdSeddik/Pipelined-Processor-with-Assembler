@@ -33,7 +33,7 @@ ISA = {
     "NOP": Instruction("NOP", "0000", 0, [], ""),
     # 1 reg
     "OUT":      Instruction("OUT",      "0000", 1, [(OperandType.SRC1,)], r" *R([0-9])"),
-    "PUSH":     Instruction("PUSH",     "0001", 1, [(OperandType.SRC1,)], r" *R([0-9])"),
+    "PUSH":     Instruction("PUSH",     "0001", 1, [(OperandType.SRC2,)], r" *R([0-9])"),
     "PROTECT":  Instruction("PROTECT",  "0010", 1, [(OperandType.SRC1,)], r" *R([0-9])"),
     "FREE":     Instruction("FREE",     "0011", 1, [(OperandType.SRC1,)], r" *R([0-9])"),
     "JZ":       Instruction("JZ",       "0100", 1, [(OperandType.SRC1,)], r" *R([0-9])"),
