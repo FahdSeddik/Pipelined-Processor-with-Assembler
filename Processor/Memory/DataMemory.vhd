@@ -29,7 +29,7 @@ ARCHITECTURE mem OF DataMemory IS
                 IF rising_edge(i_clk) THEN  
                     IF i_memWrite = '1' THEN
                         -- check if address is out of range
-                        IF to_integer(unsigned(i_address)) >= MEM_SIZE THEN
+                        IF to_integer(unsigned(i_address)) > MEM_SIZE THEN
                             o_exception <= '1';
 
                         -- check if address is protected
@@ -42,7 +42,7 @@ ARCHITECTURE mem OF DataMemory IS
                             ram(to_integer(unsigned(i_address))+1) <= '0' & i_dataIn(31 DOWNTO 16);
                         END IF;
                     ELSIF i_memRead = '1' THEN
-                        IF to_integer(unsigned(i_address)) >= MEM_SIZE THEN
+                        IF to_integer(unsigned(i_address)) > MEM_SIZE THEN
                             o_exception <= '1';
                         ELSE
                             -- little endian
