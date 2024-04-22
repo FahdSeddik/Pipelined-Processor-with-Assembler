@@ -6,6 +6,7 @@ ENTITY ImmediateHandler IS
   PORT (
     -- inputs
     i_clk : IN STD_LOGIC := '0';
+    i_reset : IN STD_LOGIC; -- added reset signal
     i_input : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
     -- outputs
     o_instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
@@ -24,7 +25,12 @@ ARCHITECTURE behavioral OF ImmediateHandler IS
 BEGIN
   PROCESS (ALL)
   BEGIN
-    IF falling_edge(i_clk) THEN
+    IF i_reset = '1' THEN -- added reset condition
+      r_state <= instruction_wait;
+      r_instruction <= (OTHERS => '0');
+      r_immediate <= (OTHERS => '0');
+      r_temp <= (OTHERS => '0');
+    ELSIF falling_edge(i_clk) THEN
       CASE r_state IS
         WHEN instruction_wait =>
           IF i_input(0) = '1' THEN -- has immediate

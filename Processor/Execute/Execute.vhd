@@ -1,88 +1,88 @@
 --this entity does not include branching
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-use IEEE.std_logic_signed.all;
-entity Execute is port(
-    i_clk, i_reset: in std_logic;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+USE IEEE.std_logic_signed.ALL;
+ENTITY Execute IS PORT (
+    i_clk, i_reset : IN STD_LOGIC;
     --control signals
-    i_aluOp: in std_logic_vector(3 downto 0);
-    i_inputEnable,i_outputEnable: in std_logic;
-    i_isImm: in std_logic;
+    i_aluOp : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    i_inputEnable, i_outputEnable : IN STD_LOGIC;
+    i_isImm : IN STD_LOGIC;
     --input port
-    i_inputPort: in std_logic_vector(31 downto 0);
+    i_inputPort : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     --data signals from decode
-    i_vRs1,i_vRs2,i_immediate: in std_logic_vector(31 downto 0);
-    i_aRs1,i_aRs2: in std_logic_vector(2 downto 0);
+    i_vRs1, i_vRs2, i_immediate : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+    i_aRs1, i_aRs2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     --data signals from memory
-    i_vResult_ex,i_vRs2_ex: in std_logic_vector(31 downto 0);
-    i_aRd_ex,i_aRs2_ex: in std_logic_vector(2 downto 0);
-    i_WB_ex: in std_logic_vector(1 downto 0);
+    i_vResult_ex, i_vRs2_ex : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+    i_aRd_ex, i_aRs2_ex : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+    i_WB_ex : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
     --data signals from write back
-    i_vResult_mem,i_vRs2_mem: in std_logic_vector(31 downto 0);
-    i_aRd_mem,i_aRs2_mem: in std_logic_vector(2 downto 0);
-    i_WB_mem: in std_logic_vector(1 downto 0);
+    i_vResult_mem, i_vRs2_mem : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+    i_aRd_mem, i_aRs2_mem : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+    i_WB_mem : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
     --output signal out of here
-    o_overflow: out std_logic;
-    o_result: out std_logic_vector(31 downto 0);
-    o_output: out std_logic_vector(31 downto 0);
-    o_vRs2: out std_logic_vector(31 downto 0);
-    o_flags : out std_logic_vector(3 downto 0)
+    o_overflow : OUT STD_LOGIC;
+    o_result : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    o_output : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    o_vRs2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    o_flags : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
 );
-end entity Execute;
-architecture imp of Execute is
-    component forwardUnit is port(
-        i_rs1,i_rs2,i_rd_ex,i_rs2_ex,i_rd_mem,i_rs2_mem: in std_logic_vector(2 downto 0); --the addresses of the regs
-        i_wb_ex,i_wb_mem: in std_logic_vector(1 downto 0); -- the writebacks
-        o_selector1,o_selector2: out std_logic_vector(2 downto 0)
-    );
-    end component;
-    component ALU is port(
-        i_a,i_b: in std_logic_vector(31 downto 0);
-        i_op: in std_logic_vector(3 downto 0);
-        o_result: out std_logic_vector(31 downto 0);
-        o_flags: out std_logic_vector(3 downto 0) --[3]overflow,[2]carry,[1]neg,[0]zero
-    );
-    end component;
-    component FlagRegister is port(
-        i_clk,i_rst: in std_logic;
-        i_aluOp,i_flags: in std_logic_vector(3 downto 0);
-        o_flags: out std_logic_vector(3 downto 0) --[3]overflow,[2]carry,[1]neg,[0]zero
-    );
-    end component;
-    component outputPort is port(
-        i_clk,i_rst,i_outputEnable: in std_logic;
-        i_result: in std_logic_vector(31 downto 0);
-        o_output: out std_logic_vector(31 downto 0) 
-    );
-    end component;
-    signal s_selector1,s_selector2: std_logic_vector(2 downto 0);
-    signal s_true_Rs1,s_true_Rs2: std_logic_vector(31 downto 0);
-    signal s_second_operand: std_logic_vector(31 downto 0);
-    signal s_result_alu: std_logic_vector(31 downto 0);
-    signal s_flags_alu: std_logic_vector(3 downto 0);
-    signal s_true_Result: std_logic_vector(31 downto 0);
-    signal s_flags: std_logic_vector(3 downto 0);
-begin
-    forward:forwardUnit port map(i_aRs1,i_aRs2,i_aRd_ex,i_aRs2_ex,i_aRd_mem,i_aRs2_mem,i_WB_ex,i_WB_mem,s_selector1,s_selector2);
-    alu1:ALU port map(s_true_Rs1,s_second_operand,i_aluOp,s_result_alu,s_flags_alu);
-    flag:FlagRegister port map(i_clk,i_reset,i_aluOp,s_flags_alu,s_flags);
-    output:outputPort port map(i_clk,i_reset,i_outputEnable,s_result_alu,o_output);
-    s_true_Rs1 <= i_vRs1 when s_selector1 = "000" else --First forwarding mux
-                    i_vResult_ex when s_selector1 = "001" else
-                    i_vRs2_ex when s_selector1 = "010" else
-                    i_vResult_mem when s_selector1 = "011" else
-                    i_vRs2_mem;
-    s_true_Rs2 <= i_vRs2 when s_selector2 = "000" else --Second forwarding mux
-                    i_vResult_ex when s_selector2 = "001" else
-                    i_vRs2_ex when s_selector2 = "010" else
-                    i_vResult_mem when s_selector2 = "011" else
-                    i_vRs2_mem;
-    s_second_operand <= s_true_Rs2 when i_isImm = '0' else i_immediate;--Immediate or Rs2 mux
-    o_result<= s_result_alu when i_inputEnable = '0' else i_inputPort; --Output mux
-    o_overflow<= s_flags(3);
-    o_vRs2<= s_true_Rs2;
+END ENTITY Execute;
+ARCHITECTURE imp OF Execute IS
+    COMPONENT forwardUnit IS PORT (
+        i_rs1, i_rs2, i_rd_ex, i_rs2_ex, i_rd_mem, i_rs2_mem : IN STD_LOGIC_VECTOR(2 DOWNTO 0); --the addresses of the regs
+        i_wb_ex, i_wb_mem : IN STD_LOGIC_VECTOR(1 DOWNTO 0); -- the writebacks
+        o_selector1, o_selector2 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
+        );
+    END COMPONENT;
+    COMPONENT ALU IS PORT (
+        i_a, i_b : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        i_op : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+        o_result : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        o_flags : OUT STD_LOGIC_VECTOR(3 DOWNTO 0) --[3]overflow,[2]carry,[1]neg,[0]zero
+        );
+    END COMPONENT;
+    COMPONENT FlagRegister IS PORT (
+        i_clk, i_rst : IN STD_LOGIC;
+        i_aluOp, i_flags : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+        o_flags : OUT STD_LOGIC_VECTOR(3 DOWNTO 0) --[3]overflow,[2]carry,[1]neg,[0]zero
+        );
+    END COMPONENT;
+    COMPONENT outputPort IS PORT (
+        i_clk, i_rst, i_outputEnable : IN STD_LOGIC;
+        i_result : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        o_output : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+        );
+    END COMPONENT;
+    SIGNAL s_selector1, s_selector2 : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL s_true_Rs1, s_true_Rs2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL s_second_operand : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL s_result_alu : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL s_flags_alu : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL s_true_Result : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL s_flags : STD_LOGIC_VECTOR(3 DOWNTO 0);
+BEGIN
+    forward : forwardUnit PORT MAP(i_aRs1, i_aRs2, i_aRd_ex, i_aRs2_ex, i_aRd_mem, i_aRs2_mem, i_WB_ex, i_WB_mem, s_selector1, s_selector2);
+    alu1 : ALU PORT MAP(s_true_Rs1, s_second_operand, i_aluOp, s_result_alu, s_flags_alu);
+    flag : FlagRegister PORT MAP(i_clk, i_reset, i_aluOp, s_flags_alu, s_flags);
+    output : outputPort PORT MAP(i_clk, i_reset, i_outputEnable, s_result_alu, o_output);
+    s_true_Rs1 <= i_vRs1 WHEN s_selector1 = "000" ELSE --First forwarding mux
+        i_vResult_ex WHEN s_selector1 = "001" ELSE
+        i_vRs2_ex WHEN s_selector1 = "010" ELSE
+        i_vResult_mem WHEN s_selector1 = "011" ELSE
+        i_vRs2_mem;
+    s_true_Rs2 <= i_vRs2 WHEN s_selector2 = "000" ELSE --Second forwarding mux
+        i_vResult_ex WHEN s_selector2 = "001" ELSE
+        i_vRs2_ex WHEN s_selector2 = "010" ELSE
+        i_vResult_mem WHEN s_selector2 = "011" ELSE
+        i_vRs2_mem;
+    s_second_operand <= s_true_Rs2 WHEN i_isImm = '0' ELSE
+        i_immediate;--Immediate or Rs2 mux
+    o_result <= s_result_alu WHEN i_inputEnable = '0' ELSE
+        i_inputPort; --Output mux
+    o_overflow <= s_flags(3);
+    o_vRs2 <= s_true_Rs2;
     o_flags <= s_flags;
-
-
-end imp;
+END imp;

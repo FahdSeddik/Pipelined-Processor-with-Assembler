@@ -9,6 +9,7 @@ ENTITY Fetch IS
     i_exception : IN STD_LOGIC := '0'; -- mem violation or overflow
     i_freeze : IN STD_LOGIC := '0';
     i_clk : IN STD_LOGIC := '0';
+    i_reset : IN STD_LOGIC := '0';
     -- outputs
     o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     o_instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
@@ -30,12 +31,14 @@ BEGIN
       i_exception => i_exception,
       i_freeze => i_freeze,
       i_clk => i_clk,
-      o_adress => o_pc
+      o_adress => o_pc,
+      i_reset => i_reset
     );
 
   instruction_memory : ENTITY work.instructionMemory
     PORT MAP(
       i_clk => i_clk,
+      i_reset => i_reset,
       i_address => o_pc(11 DOWNTO 0),
       o_instruction => w_instruction_memory_out
     );
@@ -50,6 +53,7 @@ BEGIN
   immediate_handling : ENTITY work.immediateHandler
     PORT MAP(
       i_clk => i_clk,
+      i_reset => i_reset,
       i_input => w_mux_out,
       o_instruction => o_instruction,
       o_immediate => o_immediate
