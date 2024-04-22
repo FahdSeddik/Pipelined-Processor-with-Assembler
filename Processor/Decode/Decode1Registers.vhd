@@ -44,7 +44,7 @@ o_controlSignals(3) <= w_isProtect;
 o_controlSignals(2) <= w_isFree;
 o_controlSignals(1 downto 0) <= w_branchControl;
 
-w_aluOP <= "0000";
+w_aluOP <= "0001" WHEN i_opCode = "1010" ELSE "0000";
 w_WB <= "10" WHEN i_opCode(3) = '1' ELSE "00";
 w_stackControl <= "10" WHEN i_opCode = "0001" OR i_opCode = "1001" ELSE
                   "01" WHEN i_opCode = "0110" ELSE "00";
