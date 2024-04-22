@@ -42,10 +42,6 @@ ISA = {
     "IN":       Instruction("IN",       "1000", 1, [(OperandType.DEST,)], r" *R([0-9])"),
     "POP":      Instruction("POP",      "1001", 1, [(OperandType.DEST,)], r" *R([0-9])"),
     "LDM":      Instruction("LDM",      "1010", 1, [(OperandType.DEST,), (OperandType.IMMEDIATE,)], r" *R([0-9]) *, *([0-9A-F][0-9A-F]?[0-9A-F]?[0-9A-F]?)"),
-    "NOT":      Instruction("NOT",      "1100", 1, [(OperandType.DEST, OperandType.SRC1)], r" *R([0-9])"),
-    "NEG":      Instruction("NEG",      "1101", 1, [(OperandType.DEST, OperandType.SRC1)], r" *R([0-9])"),
-    "INC":      Instruction("INC",      "1110", 1, [(OperandType.DEST, OperandType.SRC1)], r" *R([0-9])"),
-    "DEC":      Instruction("DEC",      "1111", 1, [(OperandType.DEST, OperandType.SRC1)], r" *R([0-9])"),
     # 2 reg
     "MOV":      Instruction("MOV",      "0000", 2, [(OperandType.DEST,), (OperandType.SRC1,)], r" *R([0-9]) *, *R([0-9])"),
     "SWAP":     Instruction("SWAP",     "0001", 2, [(OperandType.SRC1,), (OperandType.SRC2,)], r" *R([0-9]) *, *R([0-9])"),
@@ -54,6 +50,10 @@ ISA = {
     "LDD":      Instruction("LDD",      "0100", 2, [(OperandType.DEST,), (OperandType.IMMEDIATE,), (OperandType.SRC1,)], r" *R([0-9]) *, *([0-9A-F][0-9A-F]?) *\( *R([0-9]) *\)"),
     "CMP":      Instruction("CMP",      "0101", 2, [(OperandType.SRC1,), (OperandType.SRC2,)], r" *R([0-9]) *, *R([0-9])"),
     "STD":      Instruction("STD",      "0110", 2, [(OperandType.SRC1,), (OperandType.IMMEDIATE,), (OperandType.SRC2,)], r" *R([0-9]) *, *([0-9A-F][0-9A-F]?) *\( *R([0-9]) *\)"),
+    "NOT":      Instruction("NOT",      "0111", 2, [(OperandType.DEST, OperandType.SRC1)], r" *R([0-9])"),
+    "NEG":      Instruction("NEG",      "1000", 2, [(OperandType.DEST, OperandType.SRC1)], r" *R([0-9])"),
+    "INC":      Instruction("INC",      "1001", 2, [(OperandType.DEST, OperandType.SRC1)], r" *R([0-9])"),
+    "DEC":      Instruction("DEC",      "1010", 2, [(OperandType.DEST, OperandType.SRC1)], r" *R([0-9])"),
     # 3 reg
     "ADD":      Instruction("ADD",      "0000", 3, [(OperandType.DEST,), (OperandType.SRC1,), (OperandType.SRC2,)], r" *R([0-9]) *, *R([0-9]) *, *R([0-9])"),
     "SUB":      Instruction("SUB",      "0001", 3, [(OperandType.DEST,), (OperandType.SRC1,), (OperandType.SRC2,)], r" *R([0-9]) *, *R([0-9]) *, *R([0-9])"),
