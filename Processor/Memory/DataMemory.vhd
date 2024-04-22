@@ -26,7 +26,7 @@ ARCHITECTURE mem OF DataMemory IS
     BEGIN
         PROCESS(i_clk) IS
             BEGIN
-                IF rising_edge(i_clk) THEN  
+                IF falling_edge(i_clk) THEN  
                     IF i_memWrite = '1' THEN
                         -- check if address is out of range
                         IF to_integer(unsigned(i_address)) > MEM_SIZE THEN
