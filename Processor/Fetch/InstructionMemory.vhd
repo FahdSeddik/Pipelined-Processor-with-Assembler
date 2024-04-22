@@ -13,7 +13,7 @@ ENTITY InstructionMemory IS
   );
 END ENTITY InstructionMemory;
 
-ARCHITECTURE behavioral OF instructionmemory IS
+ARCHITECTURE behavioral OF InstructionMemory IS
   TYPE t_memory IS ARRAY (0 TO 2 ** 12 - 1) OF STD_LOGIC_VECTOR(15 DOWNTO 0);
   SIGNAL r_mem : t_memory;
 BEGIN
