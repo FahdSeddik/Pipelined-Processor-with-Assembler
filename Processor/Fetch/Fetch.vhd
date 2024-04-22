@@ -8,6 +8,7 @@ ENTITY Fetch IS
     i_we : IN STD_LOGIC := '0';
     i_exception : IN STD_LOGIC := '0'; -- mem violation or overflow
     i_freeze : IN STD_LOGIC := '0';
+    i_reset : IN STD_LOGIC := '0';
     i_clk : IN STD_LOGIC := '0';
     -- outputs
     o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
@@ -29,6 +30,7 @@ BEGIN
       i_we => i_we,
       i_exception => i_exception,
       i_freeze => i_freeze,
+      i_reset => i_reset,
       i_clk => i_clk,
       o_adress => o_pc
     );
