@@ -39,7 +39,7 @@ ARCHITECTURE mem OF DataMemory IS
                         ELSE
                             -- little endian
                             ram(to_integer(unsigned(i_address))) <= '0' & i_dataIn(15 DOWNTO 0);
-                            ram(to_integer(unsigned(i_address))+1) <= '0' & i_dataIn(31 DOWNTO 16);
+                            ram(to_integer(unsigned(i_address)+1)) <= '0' & i_dataIn(31 DOWNTO 16);
                         END IF;
                     ELSIF i_memRead = '1' THEN
                         IF to_integer(unsigned(i_address)) > MEM_SIZE THEN
