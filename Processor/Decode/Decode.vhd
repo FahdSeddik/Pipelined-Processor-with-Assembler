@@ -118,8 +118,8 @@ w_wbAddress1 <= i_wbAddress0 WHEN i_writeEnable(0) = '1' ELSE
 RF : REGISTER_FILE PORT MAP(
     i_clk,
     i_reset,
-    i_writeEnable(0),
     i_writeEnable(1),
+    i_writeEnable(0),
     w_rAddress0,
     w_rAddress1,
     w_wbAddress0,
