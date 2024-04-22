@@ -73,7 +73,7 @@ begin
                     i_vRs2_ex when s_selector1 = "010" else
                     i_vResult_mem when s_selector1 = "011" else
                     i_vRs2_mem;
-    s_true_Rs2 <= i_vRs1 when s_selector2 = "000" else --Second forwarding mux
+    s_true_Rs2 <= i_vRs2 when s_selector2 = "000" else --Second forwarding mux
                     i_vResult_ex when s_selector2 = "001" else
                     i_vRs2_ex when s_selector2 = "010" else
                     i_vResult_mem when s_selector2 = "011" else

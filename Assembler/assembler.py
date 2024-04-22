@@ -44,7 +44,7 @@ ISA = {
     "LDM":      Instruction("LDM",      "1010", 1, [(OperandType.DEST,), (OperandType.IMMEDIATE,)], r" *R([0-9]) *, *([0-9A-F][0-9A-F]?[0-9A-F]?[0-9A-F]?)"),
     # 2 reg
     "MOV":      Instruction("MOV",      "0000", 2, [(OperandType.DEST,), (OperandType.SRC1,)], r" *R([0-9]) *, *R([0-9])"),
-    "SWAP":     Instruction("SWAP",     "0001", 2, [(OperandType.SRC1,), (OperandType.SRC2,)], r" *R([0-9]) *, *R([0-9])"),
+    "SWAP":     Instruction("SWAP",     "0001", 2, [(OperandType.DEST, OperandType.SRC1), (OperandType.SRC2,)], r" *R([0-9]) *, *R([0-9])"),
     "ADDI":     Instruction("ADDI",     "0010", 2, [(OperandType.DEST,), (OperandType.SRC1,), (OperandType.IMMEDIATE,)], r" *R([0-9]) *, *R([0-9]) *, *([0-9A-F][0-9A-F]?[0-9A-F]?[0-9A-F]?)"),
     "SUBI":     Instruction("SUBI",     "0011", 2, [(OperandType.DEST,), (OperandType.SRC1,), (OperandType.IMMEDIATE,)], r" *R([0-9]) *, *R([0-9]) *, *([0-9A-F][0-9A-F]?[0-9A-F]?[0-9A-F]?)"),
     "LDD":      Instruction("LDD",      "0100", 2, [(OperandType.DEST,), (OperandType.IMMEDIATE,), (OperandType.SRC1,)], r" *R([0-9]) *, *([0-9A-F][0-9A-F]?) *\( *R([0-9]) *\)"),
