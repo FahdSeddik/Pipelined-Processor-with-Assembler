@@ -1,3 +1,18 @@
+#compilation
+vcom -2008 ./General/PipelineRegs/EX_MEM.vhd
+vcom -2008 ./General/PipelineRegs/ID_EX.vhd
+vcom -2008 ./General/PipelineRegs/IF_ID.vhd
+vcom -2008 ./General/PipelineRegs/MEM_WB.vhd
+vcom -2008 ./General/ExceptionHandlerReg.vhd
+vcom -2008 ./General/BranchControl.vhd
+vcom -2008 ./General/ExceptionHandlerReg.vhd
+vcom -2008 ./Fetch/*
+vcom -2008 ./Memory/*
+vcom -2008 ./Decode/*
+vcom -2008 ./Execute/*
+vcom -2008 ./Processor.vhd
+
+
 #sim
 vsim -gui work.processor
 
@@ -90,7 +105,7 @@ force -freeze sim:/processor/i_clk 1 0, 0 {5 ps} -r {10 ps}
 
 force -freeze sim:/processor/i_reset 1 0
 
-run 1 ps
+run 10 ps
 
 force -freeze sim:/processor/i_reset 0 0
 
