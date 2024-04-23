@@ -13,18 +13,20 @@ ENTITY StackPointer IS
 END StackPointer;
 
 ARCHITECTURE SP OF StackPointer IS
+signal s_q : std_logic_vector(31 DOWNTO 0);
 BEGIN
     PROCESS (i_clk, i_rst)
     BEGIN
         IF i_rst = '1' THEN
             -- initial value of SP is (2^12-1)
-            o_q <= x"00000FFE";
-        ELSIF rising_edge(i_clk) THEN
+            s_q <= x"00000FFD";
+        ELSIF falling_edge(i_clk) THEN
             IF i_push = '1' THEN
-                o_q <= o_q + 1;
+                s_q <= s_q - 2;
             ELSIF i_pop = '1' THEN
-                o_q <= o_q - 1;
+                s_q <= s_q + 2;
             END IF;
         END IF;
     END PROCESS;
+    o_q <= s_q when i_push = '1' else s_q+2;
 END SP;
