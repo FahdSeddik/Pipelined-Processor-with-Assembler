@@ -37,8 +37,6 @@ BEGIN
 
   instruction_memory : ENTITY work.instructionMemory
     PORT MAP(
-      i_clk => i_clk,
-      i_reset => i_reset,
       i_address => o_pc(11 DOWNTO 0),
       o_instruction => w_instruction_memory_out
     );
