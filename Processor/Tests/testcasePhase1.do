@@ -26,7 +26,7 @@ add wave -label MemoryOutput -position end  sim:/processor/M/DataMemory1/o_dataO
 add wave -label Flags -position end  sim:/processor/E/o_flags
 
 # loading memory
-mem load -i D:/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
+mem load -i D:/gam3a/arch/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
 
 # clock
 force -freeze sim:/processor/i_clk 1 0, 0 {5 ps} -r {10 ps}
