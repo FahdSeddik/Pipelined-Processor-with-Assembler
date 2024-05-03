@@ -61,7 +61,7 @@ ISA = {
     "OR":       Instruction("OR",       "0011", 3, [(OperandType.DEST,), (OperandType.SRC1,), (OperandType.SRC2,)], r" *R([0-9]) *, *R([0-9]) *, *R([0-9])"),
     "XOR":      Instruction("XOR",      "0100", 3, [(OperandType.DEST,), (OperandType.SRC1,), (OperandType.SRC2,)], r" *R([0-9]) *, *R([0-9]) *, *R([0-9])"),
     # Special
-    ".org":     Instruction(".org",     "", 0, [(OperandType.IMMEDIATE,)], r" *([0-9A-F][0-9A-F]?[0-9A-F]?[0-9A-F]?)")
+    ".ORG":     Instruction(".ORG",     "", 0, [(OperandType.IMMEDIATE,)], r" *([0-9A-F][0-9A-F]?[0-9A-F]?[0-9A-F]?)")
 }
 
 
@@ -73,16 +73,26 @@ def transpile(lines):
         lines (list[str]): lines in the .asm file
     """
     transpiled = []
-    org = 0
+    org = 4
     comment = re.compile(r"^ *#.*")
-    for line in lines:
+    is_value = re.compile(r" *([0-9A-F][0-9A-F]?[0-9A-F]?[0-9A-F]?)")
+    for i,line in enumerate(lines):
         # line is comment
+        line = line.upper()
         line = line.strip()
         if len(line) <= 5: continue
         if len(comment.findall(line)) >= 1: continue
         name = line.split()[0]
-        assert(name in ISA)
-        if ISA[name].name == ".org": # is org
+        # if value
+        if name not in ISA:
+            if is_value.findall(name):
+                transpiled.append((org, hex_to_binary(name, 16)))
+                org += 1
+                continue
+            else:
+                print(f"Error at line {i}: Instruction {name} not found")
+                exit(1)
+        if ISA[name].name == ".ORG": # is org
             org = int(ISA[name].regex.findall(line)[0], 16)
             continue
         tr_line = decimal_to_binary(ISA[name].num_operands, 2)
