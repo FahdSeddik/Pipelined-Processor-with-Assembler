@@ -8,6 +8,7 @@ ENTITY ImmediateHandler IS
     i_clk : IN STD_LOGIC := '0';
     i_reset : IN STD_LOGIC; -- added reset signal
     i_input : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
+    i_enable : IN STD_LOGIC := '1'; -- to enable normal logic
     -- outputs
     o_instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
     o_immediate : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0')
@@ -30,7 +31,7 @@ BEGIN
       r_instruction <= (OTHERS => '0');
       r_immediate <= (OTHERS => '0');
       r_temp <= (OTHERS => '0');
-    ELSIF falling_edge(i_clk) THEN
+    ELSIF falling_edge(i_clk) AND i_enable = '1' THEN
       CASE r_state IS
         WHEN instruction_wait =>
           IF i_input(0) = '1' THEN -- has immediate
@@ -50,6 +51,9 @@ BEGIN
         WHEN OTHERS =>
           r_state <= instruction_wait;
       END CASE;
+    ELSE
+      r_instruction <= i_input;
+      r_immediate <= (OTHERS => '0');
     END IF;
   END PROCESS;
 

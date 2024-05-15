@@ -17,12 +17,19 @@ ARCHITECTURE struct OF Processor IS
   COMPONENT Fetch IS
     PORT (
       --inputs
-      i_branch : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
-      i_we : IN STD_LOGIC := '0';
+      -- branch
+      i_branch_address : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+      i_branch_we : IN STD_LOGIC := '0';
+      i_forward_pc : IN STD_LOGIC := '0';
+      -- predict
+      i_predict_we : IN STD_LOGIC := '0';
+      i_predict_address : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+      -- general
       i_exception : IN STD_LOGIC := '0'; -- mem violation or overflow
       i_freeze : IN STD_LOGIC := '0';
       i_clk : IN STD_LOGIC := '0';
       i_reset : IN STD_LOGIC := '0';
+      i_interrupt : IN STD_LOGIC := '0';
       -- outputs
       o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       o_instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
@@ -384,10 +391,14 @@ ARCHITECTURE struct OF Processor IS
 BEGIN
 
   F : Fetch PORT MAP(
-    i_branch => w_BF_branchAddress,
-    i_we => w_BF_WE,
-    i_exception => w_ExF_exception,
+    i_branch_address => w_BF_branchAddress,
+    i_branch_we => w_BF_WE,
+    i_forward_pc => '0', -- TODO
+    i_predict_we => '0', -- TODO
+    i_predict_address => (OTHERS => '0'), -- TODO
     i_freeze => '0', -- TODO ,
+    i_interrupt => '0', -- TODO
+    i_exception => w_ExF_exception,
     i_clk => i_clk,
     i_reset => i_reset,
     o_pc => w_FD_PC_1,
