@@ -30,7 +30,10 @@ ENTITY Memory IS
         o_rs2Data : OUT std_logic_vector(31 downto 0);
         o_pc : OUT std_logic_vector(31 downto 0);
         o_exception : OUT std_logic
-
+        o_return : OUT std_logic
+        o_interruptType : OUT std_logic
+        o_flush : OUT std_logic
+        o_freeze : OUT std_logic
     );
 END Memory;
 
@@ -63,28 +66,33 @@ ARCHITECTURE Behavior OF Memory IS
 
     signal s_address : std_logic_vector(31 downto 0);
     signal s_stachPointer : std_logic_vector(31 downto 0);
-    -- signal s_exception : std_logic_vector(1 downto 0);
     signal s_push : std_logic;
     signal s_pop : std_logic;
     signal s_dataIn : std_logic_vector(31 downto 0);
-    signal s_isRTI : std_logic;
-    signal s_stackControl : std_logic_vector(1 downto 0);
+    signal s_interruptType : std_logic:='0';
+    -- signal s_stackControl : std_logic_vector(1 downto 0);
 
     BEGIN
-        s_isRTI <= '1' when i_stackControl = "11" else '0';
-        s_stackControl <= (i_stackControl(1) xor s_isRTI) & i_stackControl(0);
-        s_address <= i_result when s_stackControl = "00" else s_stachPointer;
-        s_push <= '1' when s_stackControl /= "00" and i_writeBack(1) = '0' else '0';
-        s_pop <= '1' when s_stackControl /= "00" and i_writeBack(1) = '1' else '0';
-        -- data in is result in normal cases when i_stackControl = "00" 
-        -- and it is the pc in cases of ret and call instructions, i_stackControl = "01"
-        -- and it is the flag reg in when i_stackControl = "11"
-        -- rti and int are "11" then "01"
-        s_dataIn <= i_pc when s_stackControl = "01"
-                    -- flag register (4 bits) padded with 28 zeros
-                    else (0 to 27 => '0') & i_flag when s_stackControl = "11"
+        Process(i_clk)
+        BEGIN
+            if rising_edge(i_clk) then
+                if s_interruptType = '1' then
+                    s_interruptType <= '0';
+                elsif i_stackControl = "11" then
+                    s_interruptType <= '1';
+                end if;
+            end if;
+        end process;
+
+        -- s_stackControl <= (i_stackControl(1) xor s_interruptType) & i_stackControl(0);
+        s_address <= i_result when i_stackControl = "00" else s_stachPointer;
+        s_push <= '1' when i_stackControl /= "00" and i_writeBack(1) = '0' else '0';
+        s_pop <= '1' when i_stackControl /= "00" and i_writeBack(1) = '1' else '0';
+
+        -- dataIn is the data to be written to memory. PC when stackControl = 01 or 11, flag register when stackControl = 11 and s_interruptType = 1, rs2Data otherwise
+        s_dataIn <= i_pc when (i_stackControl = "11" and s_interruptType /= '1') or i_stackControl = "01" else
+                    i_flag when (i_stackControl = "11" and s_interruptType = '1')
                     else i_rs2Data;
-                     
 
 
         DataMemory1: DataMemory PORT MAP(
@@ -108,11 +116,14 @@ ARCHITECTURE Behavior OF Memory IS
         );
 
         o_memRead <= i_memRead;
-        o_writeBack <= i_writeBack;
+        o_writeBack <= i_writeBack when i_stackControl = '10' else "00";
         o_result <= i_result;
         o_rdstAddr <= i_rdstAddr;
         o_rs2Addr <= i_rs2Addr;
         o_rs2Data <= i_rs2Data;
         o_pc <= i_pc;
-
+        o_return <= i_stackControl(0) & i_writeBack(1) & not s_interruptType;
+        o_interruptType <= s_interruptType;
+        o_freeze <= '1' when (i_stackControl = "11" and s_interruptType = '0') else '0';
+        o_flush <= '1' when (i_stackControl = "11" and s_interruptType = '1') or i_stackControl = "01" else '0';
 END Behavior;
