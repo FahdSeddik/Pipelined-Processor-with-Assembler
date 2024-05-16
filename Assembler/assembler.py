@@ -74,14 +74,15 @@ def transpile(lines):
     """
     transpiled = []
     org = 4
-    comment = re.compile(r"^ *#.*")
-    is_value = re.compile(r"^ *([0-9A-F][0-9A-F]?[0-9A-F]?[0-9A-F]?)")
+    is_value = re.compile(r"^ *([0-9A-F]{1,4})(?: *)?$")
     for i,line in enumerate(lines):
         # line is comment
+        idx = line.find("#")
+        if idx != -1:
+            line = line[:idx]
         line = line.upper()
         line = line.strip()
         if len(line) == 0: continue
-        if len(comment.findall(line)) >= 1: continue
         if is_value.findall(line):
             transpiled.append((org, hex_to_binary(line, 16)))
             org += 1
