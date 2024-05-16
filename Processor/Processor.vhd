@@ -42,8 +42,9 @@ ARCHITECTURE struct OF Processor IS
       -- inputs
       i_clk : IN STD_LOGIC := '0';
       i_reset : IN STD_LOGIC := '0'; -- reset signal
-      i_pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       i_en : IN STD_LOGIC := '0';
+      i_flush : IN STD_LOGIC := '0'; -- flush signal
+      i_pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       i_instruction : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
       i_immediate : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
       -- outputs
@@ -103,7 +104,7 @@ ARCHITECTURE struct OF Processor IS
 
   COMPONENT ID_EX IS
     PORT (
-      i_clk, i_reset, i_en : IN STD_LOGIC := '0';
+      i_clk, i_reset, i_en, i_flush : IN STD_LOGIC := '0';
       -- Input control signals
       i_WB : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); -- o_WB[1]->normal o_WB[0]->on if swap
       i_stackControl : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --to determine what types of stack instructions is needed
@@ -116,6 +117,7 @@ ARCHITECTURE struct OF Processor IS
       i_isFree : IN STD_LOGIC := '0';
       i_branchControl : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');
       -- Input signals from decode
+      i_branchPredict : IN STD_LOGIC := '0';
       i_aluOP : IN STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');
       i_vRs1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       i_vRs2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
@@ -126,6 +128,7 @@ ARCHITECTURE struct OF Processor IS
       -- Input no-logic wires
       i_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       -- Output ### ADD SEMI-COLON ABOVE
+      o_bitpredict : OUT STD_LOGIC;
       o_WB : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');
       o_stackControl : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');
       o_memWrite : OUT STD_LOGIC := '0';
@@ -165,6 +168,7 @@ ARCHITECTURE struct OF Processor IS
   SIGNAL w_DE_aRs2_1, w_DE_aRs2_2 : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_DE_aRd_1, w_DE_aRd_2 : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_DE_PC_1, w_DE_PC_2 : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+  SIGNAL w_DE_branchPredict : STD_LOGIC := '0';
   -- ###################################
 
   -- ###################################
@@ -198,7 +202,7 @@ ARCHITECTURE struct OF Processor IS
 
   COMPONENT EX_MEM IS
     PORT (
-      i_clk, i_reset, i_en : IN STD_LOGIC := '0';
+      i_clk, i_reset, i_en, i_flush : IN STD_LOGIC := '0';
       -- Input control signals
       i_WB : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); -- o_WB[1]->normal o_WB[0]->on if swap
       i_stackControl : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --to determine what types of stack instructions is needed
@@ -275,7 +279,11 @@ ARCHITECTURE struct OF Processor IS
       o_rs2Addr : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
       o_rs2Data : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-      o_exception : OUT STD_LOGIC
+      o_exception : OUT STD_LOGIC;
+      o_return : OUT STD_LOGIC;
+      o_interruptType : OUT STD_LOGIC;
+      o_flush : OUT STD_LOGIC;
+      o_freeze : OUT STD_LOGIC
     );
   END COMPONENT;
 
@@ -285,6 +293,7 @@ ARCHITECTURE struct OF Processor IS
       i_clk : IN STD_LOGIC := '0';
       i_reset : IN STD_LOGIC := '0'; -- reset signal
       i_en : IN STD_LOGIC := '0';
+      i_flush : IN STD_LOGIC := '0'; -- flush signal
       i_memRead : IN STD_LOGIC;
       i_writeBack : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
       i_readData : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -341,9 +350,13 @@ ARCHITECTURE struct OF Processor IS
     PORT (
       -- inputs
       i_branch_control : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := "00"; -- a branch in
-      -- 00 = no branch, 01 = branch always (jmp), 10 = branch if equal (JZ), 11 = XXX
-      i_branch_adress : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0'); -- adress to jump
+      -- 00 = no branch, 01 = branch always (jmp), 10 = branch if equal (JZ), 11 = call
+      i_alu_res : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+      i_pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+      i_bit_predictor : IN STD_LOGIC;
       i_z_flag : IN STD_LOGIC := '0';
+      i_return : IN STD_LOGIC := '0';
+      i_branch_adress : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       -- outputs
       o_branch_control : OUT STD_LOGIC := '0'; -- branch out
       o_branch_adress : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0')
@@ -351,6 +364,24 @@ ARCHITECTURE struct OF Processor IS
   END COMPONENT;
   SIGNAL w_BF_WE : STD_LOGIC := '0';
   SIGNAL w_BF_branchAddress : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+  COMPONENT Bit_Predictor IS
+    PORT (
+      i_clk : IN STD_LOGIC;
+      i_aRs1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      i_vRs1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      i_branch_control : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      i_branched : IN STD_LOGIC;
+      i_Ex_wb : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      i_Ex_aRd : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      i_Mem_wb : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+      i_Mem_aRd : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      --outputs
+      o_prediction : OUT STD_LOGIC;
+      o_address : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+  END COMPONENT;
+  SIGNAL w_BP_prediction : STD_LOGIC := '0';
+  SIGNAL w_BP_address : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
 
   COMPONENT ExceptionHandler IS
     PORT (
@@ -384,9 +415,12 @@ ARCHITECTURE struct OF Processor IS
   END COMPONENT;
   SIGNAL w_EPCMem, w_EPCMem_2, w_EPCExe_2 : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_MemException, w_MemException_2 : STD_LOGIC := '0';
+  SIGNAL w_MemReturn, w_MeminterruptType, w_MemFlush, w_MemFreeze : STD_LOGIC := '0';
   SIGNAL w_ExeException, w_ExeException_2 : STD_LOGIC := '0';
   SIGNAL w_ExF_exception : STD_LOGIC := '0';
   SIGNAL w_Ex_flush : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');
+  --flushing signals
+  SIGNAL w_FD_flush, w_DE_flush, w_EM_flush, w_MW_flush : STD_LOGIC := '0';
 
 BEGIN
 
@@ -411,6 +445,7 @@ BEGIN
     i_reset => i_reset OR w_Ex_flush(0),
     i_pc => w_FD_PC_1,
     i_en => '1',
+    i_flush => w_FD_flush,
     i_instruction => w_FD_instruction_1,
     i_immediate => w_FD_immediate_1,
     o_pc => w_FD_PC_2,
@@ -462,6 +497,7 @@ BEGIN
     i_clk => i_clk,
     i_reset => i_reset OR w_Ex_flush(0), -- ????? FLUSHHHH>>????
     i_en => '1',
+    i_flush => w_DE_flush, --replace with flush expression
     -- Input control signals
     i_WB => w_DE_WB_1,
     i_stackControl => w_DE_stackControl_1,
@@ -474,6 +510,7 @@ BEGIN
     i_isFree => w_DE_isFree_1,
     i_branchControl => w_DE_branchControl_1,
     -- Input signals from decode
+    i_branchPredict => w_BP_prediction,
     i_aluOP => w_DE_aluOP_1,
     i_vRs1 => w_DE_vRs1_1,
     i_vRs2 => w_DE_vRs2_1,
@@ -484,6 +521,7 @@ BEGIN
     -- Input no-logic wires
     i_pc => w_DE_PC_1,
     -- Output
+    o_bitpredict => w_DE_branchPredict,
     o_WB => w_DE_WB_2,
     o_stackControl => w_DE_stackControl_2,
     o_memWrite => w_DE_memWrite_2,
@@ -545,6 +583,7 @@ BEGIN
     i_clk => i_clk,
     i_reset => i_reset OR w_Ex_flush(1),
     i_en => '1',
+    i_flush => w_EM_flush, --replace with flush expression
     -- Input control signals
     i_WB => w_DE_WB_2,
     i_stackControl => w_DE_stackControl_2,
@@ -602,7 +641,11 @@ BEGIN
     o_rs2Addr => w_MW_rs2Addr_1,
     o_rs2Data => w_MW_rs2Data_1,
     o_pc => w_EPCMem,
-    o_exception => w_MemException
+    o_exception => w_MemException,
+    o_return => w_MemReturn,
+    o_interruptType => w_MeminterruptType,
+    o_flush => w_MemFlush,
+    o_freeze => w_MemFreeze
   );
 
   MW : MEM_WB PORT MAP(
@@ -610,6 +653,7 @@ BEGIN
     i_clk => i_clk,
     i_reset => i_reset,
     i_en => '1',
+    i_flush => w_MW_flush, --replace with flush expression
     i_memRead => w_MW_memRead_1,
     i_writeBack => w_MW_writeBack_1,
     i_readData => w_MW_readData_1,
@@ -642,13 +686,29 @@ BEGIN
     o_rs2Addr => w_WD_address1,
     o_rs2Data => w_WD_data1
   );
-
+  BP : Bit_Predictor PORT MAP(
+    i_clk => i_clk,
+    i_aRs1 => w_DE_aRs1_1,
+    i_vRs1 => w_DE_vRs1_1,
+    i_branch_control => w_DE_branchControl_1,
+    i_branched => w_BF_WE,
+    i_Ex_wb => w_DE_WB_2,
+    i_Ex_aRd => w_DE_aRd_2,
+    i_Mem_wb => w_EM_WB,
+    i_Mem_aRd => w_EM_aRd,
+    o_prediction => w_BP_prediction, --TODO
+    o_address => w_BP_address --TODO
+  );
   BC : BranchControl PORT MAP(
     -- inputs
     i_branch_control => w_DE_branchControl_2,
-    -- 00 = no branch, 01 = branch always (jmp), 10 = branch if equal (JZ), 11 = XXX
-    i_branch_adress => w_EM_aluResult_1,
+    -- 00 = no branch, 01 = branch always (jmp), 10 = branch if equal (JZ), 11 = call
+    i_alu_res => w_EM_aluResult_1,
+    i_pc => w_DE_PC_2,
+    i_bit_predictor => w_DE_branchPredict,
     i_z_flag => w_EM_flags_1(0),
+    i_return => w_MemReturn,
+    i_branch_adress => w_MW_readData_2,
     -- outputs
     o_branch_control => w_BF_WE,
     o_branch_adress => w_BF_branchAddress
@@ -680,5 +740,9 @@ BEGIN
     o_exception_memory_violation => w_MemException_2, -- floating
     o_exception_overflow => w_ExeException_2 -- floating
   );
+  w_FD_flush <= w_BP_prediction OR w_BF_WE;
+  w_DE_flush <= w_BF_WE OR w_Ex_flush(0);--or hazard controller
+  w_EM_flush <= w_Ex_flush(1) OR w_MemFlush;
+  w_MW_flush <= '0';
 
 END ARCHITECTURE struct;
