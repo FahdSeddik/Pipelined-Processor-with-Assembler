@@ -20,6 +20,10 @@ i_wbAddress1 : IN std_logic_vector(2 downto 0) := (others => '0');
 i_hduClearControl : IN std_logic := '0';
 -- Input from execution
 i_exeClearControl : IN std_logic := '0';
+-- Input from branch handler
+i_branchAddress : IN std_logic_vector(31 downto 0) := (others => '0');
+-- Input from Interrupt handler
+i_forwardPC : IN std_logic := '0';
 -- Output control signals
 o_WB : OUT std_logic_vector(1 downto 0) := (others => '0'); -- o_WB[1]->normal o_WB[0]->on if swap
 o_stackControl : OUT std_logic_vector(1 downto 0) := (others => '0'); --to determine what types of stack instructions is needed
@@ -137,7 +141,8 @@ o_aRs2 <= w_rAddress1;
 w_rAddress0 <= i_instruction(6 downto 4);
 w_rAddress1 <= i_instruction(3 downto 1);
 o_isImm <= i_instruction(0);
-o_pc <= i_pc;
+o_pc <= i_pc WHEN i_forwardPC = '0' ELSE
+        i_branchAddress;
 -- Assign opcode and number of inputs from instruction
 num_inputs <= i_instruction(15 downto 14);
 opcode <= i_instruction(13 downto 10);

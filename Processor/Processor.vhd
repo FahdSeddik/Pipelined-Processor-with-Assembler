@@ -6,6 +6,7 @@ ENTITY Processor IS
   PORT (
     i_clk : IN STD_LOGIC;
     i_reset : IN STD_LOGIC;
+    i_interrupt : IN STD_LOGIC;
     i_port : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     o_port : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
@@ -78,6 +79,10 @@ ARCHITECTURE struct OF Processor IS
       i_hduClearControl : IN STD_LOGIC := '0';
       -- Input from execution
       i_exeClearControl : IN STD_LOGIC := '0';
+      -- Input from branch handler
+      i_branchAddress : IN std_logic_vector(31 downto 0) := (others => '0');
+      -- Input from Interrupt handler
+      i_forwardPC : IN std_logic := '0';
       -- Output control signals
       o_WB : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); -- o_WB[1]->normal o_WB[0]->on if swap
       o_stackControl : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --to determine what types of stack instructions is needed
@@ -427,11 +432,11 @@ BEGIN
   F : Fetch PORT MAP(
     i_branch_address => w_BF_branchAddress,
     i_branch_we => w_BF_WE,
-    i_forward_pc => '0', -- TODO
-    i_predict_we => '0', -- TODO
-    i_predict_address => (OTHERS => '0'), -- TODO
+    i_forward_pc => w_BF_WE,
+    i_predict_we => w_BP_prediction,
+    i_predict_address => w_BP_address,
     i_freeze => '0', -- TODO ,
-    i_interrupt => '0', -- TODO
+    i_interrupt => i_interrupt,
     i_exception => w_ExF_exception,
     i_clk => i_clk,
     i_reset => i_reset,
@@ -470,6 +475,10 @@ BEGIN
     i_hduClearControl => '0', -- TODO
     -- Input from execution
     i_exeClearControl => w_Ex_flush(0),
+    -- Input from branch handler
+    i_branchAddress => w_BF_branchAddress,
+    -- Input from Interrupt handler
+    i_forwardPC => w_BF_WE,
     -- Output control signals
     o_WB => w_DE_WB_1,
     o_stackControl => w_DE_stackControl_1,
