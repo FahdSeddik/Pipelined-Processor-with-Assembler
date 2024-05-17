@@ -19,8 +19,9 @@ ENTITY Bit_Predictor IS
 END Bit_Predictor;
 ARCHITECTURE imp OF Bit_Predictor IS
     SIGNAL s_prediction : STD_LOGIC := '0';
+    SIGNAL so_prediction : STD_LOGIC := '0';
 BEGIN
-    o_prediction <= '0' WHEN (i_Ex_wb(1) = '1' AND i_Ex_aRd = i_aRs1) OR(i_Mem_wb(1) = '1' AND i_Mem_aRd = i_aRs1) OR i_branch_control = "00"
+    so_prediction <= '0' WHEN (i_Ex_wb(1) = '1' AND i_Ex_aRd = i_aRs1) OR(i_Mem_wb(1) = '1' AND i_Mem_aRd = i_aRs1) OR i_branch_control = "00"
         ELSE
         '1' WHEN i_branch_control = "11" OR i_branch_control = "01"
         ELSE
@@ -33,7 +34,10 @@ BEGIN
             ELSE
                 s_prediction <= s_prediction XOR i_branched;
             END IF;
+        ELSIF falling_edge(i_clk) THEN
+            o_prediction <= so_prediction;
         END IF;
+
     END PROCESS;
 
 END imp;
