@@ -456,7 +456,7 @@ BEGIN
 
   FD : IF_ID PORT MAP(
     i_clk => i_clk,
-    i_reset => i_reset OR w_Ex_flush(0),
+    i_reset => i_reset,
     i_pc => w_FD_PC_1,
     i_en => NOT w_Hazard,
     i_flush => w_FD_flush,

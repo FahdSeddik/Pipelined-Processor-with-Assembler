@@ -45,6 +45,9 @@ BEGIN
       r_pc := (1 => '1', OTHERS => '0'); -- start reading at 0x00000002
       o_address <= r_pc;
       o_stall <= '1';
+    ELSIF i_exception = '1' THEN
+      r_pc := c_exception_handler;
+      o_address <= r_pc;
     ELSIF i_freeze = '1' THEN
       o_address <= r_pc; -- freeze -> do nothing
     ELSIF i_branch_we = '1' AND rising_edge(i_clk) THEN
