@@ -1,3 +1,6 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
 ENTITY Bit_Predictor IS
     PORT (
         i_clk : IN STD_LOGIC;
@@ -17,7 +20,7 @@ END Bit_Predictor;
 ARCHITECTURE imp OF Bit_Predictor IS
     SIGNAL s_prediction : STD_LOGIC := '0';
 BEGIN
-    o_prediction <= '0' WHEN (i_Ex_wb(1) = "1" AND i_Ex_aRd = i_aRs1) OR(i_Mem_wb(1) = "1" AND i_Mem_aRd = i_aRs1) OR (i_branch_control /= "10")
+    o_prediction <= '0' WHEN (i_Ex_wb(1) = '1' AND i_Ex_aRd = i_aRs1) OR(i_Mem_wb(1) = '1' AND i_Mem_aRd = i_aRs1) OR (i_branch_control /= "10")
         ELSE
         '1' WHEN i_branch_control = "11" OR i_branch_control = "01"
         ELSE
