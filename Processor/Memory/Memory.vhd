@@ -116,7 +116,7 @@ BEGIN
     );
 
     o_memRead <= i_memRead;
-    o_writeBack <= i_writeBack WHEN i_stackControl = "10" ELSE
+    o_writeBack <= i_writeBack WHEN not i_stackControl(0) ELSE
         "00";
     o_result <= i_result;
     o_rdstAddr <= i_rdstAddr;
