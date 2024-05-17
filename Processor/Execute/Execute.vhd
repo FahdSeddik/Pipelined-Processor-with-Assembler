@@ -7,6 +7,7 @@ ENTITY Execute IS PORT (
     i_clk, i_reset : IN STD_LOGIC;
     --control signals
     i_aluOp : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    i_branchControl : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
     i_inputEnable, i_outputEnable : IN STD_LOGIC;
     i_isImm : IN STD_LOGIC;
     --input port
@@ -47,6 +48,7 @@ ARCHITECTURE imp OF Execute IS
     COMPONENT FlagRegister IS PORT (
         i_clk, i_rst : IN STD_LOGIC;
         i_aluOp, i_flags : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+        i_branchControl : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
         o_flags : OUT STD_LOGIC_VECTOR(3 DOWNTO 0) --[3]overflow,[2]carry,[1]neg,[0]zero
         );
     END COMPONENT;
@@ -65,7 +67,7 @@ ARCHITECTURE imp OF Execute IS
 BEGIN
     forward : forwardUnit PORT MAP(i_aRs1, i_aRs2, i_aRd_ex, i_aRs2_ex, i_aRd_mem, i_aRs2_mem, i_WB_ex, i_WB_mem, s_selector1, s_selector2);
     alu1 : ALU PORT MAP(s_true_Rs1, s_second_operand, i_aluOp, s_result_alu, s_flags_alu);
-    flag : FlagRegister PORT MAP(i_clk, i_reset, i_aluOp, s_flags_alu, s_flags);
+    flag : FlagRegister PORT MAP(i_clk, i_reset, i_aluOp, s_flags_alu, i_branchControl, s_flags);
     output : outputPort PORT MAP(i_clk, i_reset, i_outputEnable, s_result_alu, o_output);
     s_true_Rs1 <= i_vRs1 WHEN s_selector1 = "000" ELSE --First forwarding mux
         i_vResult_ex WHEN s_selector1 = "001" ELSE
