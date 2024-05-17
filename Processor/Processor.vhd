@@ -308,7 +308,6 @@ ARCHITECTURE struct OF Processor IS
       i_reset : IN STD_LOGIC := '0'; -- reset signal
       i_en : IN STD_LOGIC := '0';
       i_flush : IN STD_LOGIC := '0';
-      i_int : IN STD_LOGIC;
       i_memRead : IN STD_LOGIC;
       i_writeBack : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
       i_readData : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -323,8 +322,7 @@ ARCHITECTURE struct OF Processor IS
       o_result : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       o_rdstAddr : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
       o_rs2Addr : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-      o_rs2Data : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-      o_int : OUT STD_LOGIC
+      o_rs2Data : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
   END COMPONENT MEM_WB;
   SIGNAL w_MW_int : STD_LOGIC := '0';
@@ -698,7 +696,6 @@ BEGIN
     i_rdstAddr => w_MW_rdstAddr_1,
     i_rs2Addr => w_MW_rs2Addr_1,
     i_rs2Data => w_MW_rs2Data_1,
-    i_int => w_EM_int,
     -- outputs
     o_memRead => w_MW_memRead_2,
     o_writeBack => w_MW_writeBack_2,
