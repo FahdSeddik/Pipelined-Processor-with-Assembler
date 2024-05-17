@@ -63,15 +63,6 @@ BEGIN
       o_output => w_mux_out
     );
 
-  mux2 : ENTITY work.mux2
-    PORT MAP(
-      i_clk => i_clk,
-      i_pc => w_pc_out,
-      i_branch_adress => i_branch_address,
-      i_forward_pc => i_forward_pc,
-      o_output => o_pc
-    );
-
   immediate_handling : ENTITY work.immediateHandler
     PORT MAP(
       i_clk => i_clk,
@@ -88,5 +79,7 @@ BEGIN
       i_isNOP => w_pc_stall_out,
       o_instruction => o_instruction
     );
+
+  o_pc <= w_pc_out;
 
 END ARCHITECTURE behavioral;
