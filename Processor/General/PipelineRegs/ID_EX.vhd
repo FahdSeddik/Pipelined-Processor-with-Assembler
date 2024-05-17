@@ -89,7 +89,7 @@ BEGIN
         o_isImm <= i_isImm;
         o_isProtect <= i_isProtect;
         o_isFree <= i_isFree;
-        o_branchControl <= o_branchControl;
+        o_branchControl <= i_branchControl;
         o_aluOP <= i_aluOP;
         o_vRs1 <= i_vRs1;
         o_vRs2 <= i_vRs2;

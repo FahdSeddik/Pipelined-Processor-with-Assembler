@@ -354,6 +354,7 @@ ARCHITECTURE struct OF Processor IS
   COMPONENT BranchControl IS
     PORT (
       -- inputs
+      i_clk : IN STD_LOGIC;
       i_branch_control : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := "00"; -- a branch in
       -- 00 = no branch, 01 = branch always (jmp), 10 = branch if equal (JZ), 11 = call
       i_alu_res : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
@@ -710,6 +711,7 @@ BEGIN
   );
   BC : BranchControl PORT MAP(
     -- inputs
+    i_clk => i_clk,
     i_branch_control => w_DE_branchControl_2,
     -- 00 = no branch, 01 = branch always (jmp), 10 = branch if equal (JZ), 11 = call
     i_alu_res => w_EM_aluResult_1,
