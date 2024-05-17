@@ -51,7 +51,7 @@ BEGIN
         WHEN OTHERS =>
           r_state <= instruction_wait;
       END CASE;
-    ELSE
+    ELSIF i_enable = '0' THEN
       r_instruction <= i_input;
       r_immediate <= (OTHERS => '0');
     END IF;
