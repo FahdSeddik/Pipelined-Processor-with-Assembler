@@ -25,7 +25,7 @@ SIGNAL w_branchControl : std_logic_vector(1 downto 0) := (others => '0');
 -- 2.SWAP	0001 -> 0000 //
 -- 3.ADDI	0010 -> 1000 //
 -- 4.SUBI	0011 -> 1001 //
--- 5.LDD	0100 -> 0000 //
+-- 5.LDD	0100 -> 1000 //
 -- 6.CMP	0101 -> 1001 //
 -- 7.STD	0110 -> 1000 //
 -- 8.NOT 	0111 -> 0100 //
@@ -44,7 +44,7 @@ o_controlSignals(3) <= w_isProtect;
 o_controlSignals(2) <= w_isFree;
 o_controlSignals(1 downto 0) <= w_branchControl;
 
-w_aluOP <=  "1000" WHEN i_opCode = "0010" OR i_opCode = "0110" ELSE
+w_aluOP <=  "1000" WHEN i_opCode = "0010" OR i_opCode = "0110" OR i_opCode = "0100" ELSE
             "1001" WHEN i_opCode = "0011" OR i_opCode = "0101" ELSE
             "0100" WHEN i_opCode = "0111" ELSE
             "1100" WHEN i_opCode = "1000" ELSE
