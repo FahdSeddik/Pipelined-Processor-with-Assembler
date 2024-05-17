@@ -26,7 +26,7 @@ ENTITY ID_EX IS
     i_aRs2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
     i_aRd : IN STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
     -- Input no-logic wires
-    i_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+    i_pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     -- Output ### ADD SEMI-COLON ABOVE
     o_bitpredict : OUT STD_LOGIC := '0';
     o_WB : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');

@@ -94,9 +94,9 @@ add wave -position end  sim:/processor/ExHReg/o_exception_memory_violation
 add wave -position end  sim:/processor/ExHReg/o_exception_overflow
 add wave -position end  sim:/processor/E/s_flags
 
-mem load -i D:/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
+mem load -i D:/gam3a/arch/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
 add wave -position insertpoint sim:/processor/M/*
-
+add wave -position 26 sim:/processor/D/*
 force -freeze sim:/processor/i_clk 1 0, 0 {5 ps} -r {10 ps}
 
 force -freeze sim:/processor/i_reset 1 0

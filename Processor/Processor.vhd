@@ -80,9 +80,9 @@ ARCHITECTURE struct OF Processor IS
       -- Input from execution
       i_exeClearControl : IN STD_LOGIC := '0';
       -- Input from branch handler
-      i_branchAddress : IN std_logic_vector(31 downto 0) := (others => '0');
+      i_branchAddress : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       -- Input from Interrupt handler
-      i_forwardPC : IN std_logic := '0';
+      i_forwardPC : IN STD_LOGIC := '0';
       -- Output control signals
       o_WB : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); -- o_WB[1]->normal o_WB[0]->on if swap
       o_stackControl : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --to determine what types of stack instructions is needed
@@ -131,7 +131,7 @@ ARCHITECTURE struct OF Processor IS
       i_aRs2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
       i_aRd : IN STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
       -- Input no-logic wires
-      i_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+      i_pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       -- Output ### ADD SEMI-COLON ABOVE
       o_bitpredict : OUT STD_LOGIC;
       o_WB : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');
