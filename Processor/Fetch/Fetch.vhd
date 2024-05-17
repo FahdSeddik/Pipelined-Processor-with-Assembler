@@ -65,6 +65,7 @@ BEGIN
 
   mux2 : ENTITY work.mux2
     PORT MAP(
+      i_clk => i_clk,
       i_pc => w_pc_out,
       i_branch_adress => i_branch_address,
       i_forward_pc => i_forward_pc,
