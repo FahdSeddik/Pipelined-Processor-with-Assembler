@@ -181,6 +181,7 @@ ARCHITECTURE struct OF Processor IS
     i_clk, i_reset : IN STD_LOGIC;
     --control signals
     i_aluOp : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+    i_branchControl : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
     i_inputEnable, i_outputEnable : IN STD_LOGIC;
     i_isImm : IN STD_LOGIC;
     --input port
@@ -566,6 +567,7 @@ BEGIN
     i_reset => i_reset,
     --control signals
     i_aluOp => w_DE_aluOP_2,
+    i_branchControl => w_DE_branchControl_2,
     i_inputEnable => w_DE_inputEnable_2,
     i_outputEnable => w_DE_outputEnable_2,
     i_isImm => w_DE_isImm_2,
