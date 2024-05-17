@@ -751,7 +751,7 @@ BEGIN
     o_exception_memory_violation => w_MemException_2, -- floating
     o_exception_overflow => w_ExeException_2 -- floating
   );
-  w_FD_flush <= w_BP_prediction OR w_BF_WE;
+  w_FD_flush <= w_BF_WE;
   w_DE_flush <= w_BF_WE OR w_Ex_flush(0);--or hazard controller
   w_EM_flush <= w_Ex_flush(1) OR w_MemFlush;
   w_MW_flush <= '0';

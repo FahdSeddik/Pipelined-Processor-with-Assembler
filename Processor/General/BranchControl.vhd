@@ -1,5 +1,6 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.std_logic_unsigned.ALL;
 
 ENTITY BranchControl IS
   PORT (
@@ -30,11 +31,13 @@ BEGIN
     i_return;
   o_branch_adress <= i_branch_adress WHEN i_return = '1' ELSE -- prio mem
     i_alu_res WHEN so_branch_control = '1' AND i_bit_predictor = '0' ELSE
-    i_pc;
+    i_pc + 1;
   PROCESS (i_clk) IS
   BEGIN
     IF falling_edge(i_clk) THEN
       o_branch_control <= so_branch_control;
+    ELSIF rising_edge(i_clk) THEN
+      o_branch_control <= '0';
     END IF;
   END PROCESS;
 END ARCHITECTURE behavioral;
