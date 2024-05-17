@@ -61,7 +61,6 @@ ARCHITECTURE imp OF Execute IS
     SIGNAL s_second_operand : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_result_alu : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_flags_alu : STD_LOGIC_VECTOR(3 DOWNTO 0);
-    SIGNAL s_true_Result : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_flags : STD_LOGIC_VECTOR(3 DOWNTO 0);
 BEGIN
     forward : forwardUnit PORT MAP(i_aRs1, i_aRs2, i_aRd_ex, i_aRs2_ex, i_aRd_mem, i_aRs2_mem, i_WB_ex, i_WB_mem, s_selector1, s_selector2);

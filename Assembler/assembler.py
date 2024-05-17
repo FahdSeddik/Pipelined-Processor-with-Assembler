@@ -49,7 +49,7 @@ ISA = {
     "SUBI":     Instruction("SUBI",     "0011", 2, [(OperandType.DEST,), (OperandType.SRC1,), (OperandType.IMMEDIATE,)], r" *R([0-9]) *, *R([0-9]) *, *([0-9A-F][0-9A-F]?[0-9A-F]?[0-9A-F]?)"),
     "LDD":      Instruction("LDD",      "0100", 2, [(OperandType.DEST,), (OperandType.IMMEDIATE,), (OperandType.SRC1,)], r" *R([0-9]) *, *([0-9A-F]{1,3}) *\( *R([0-9]) *\)"),
     "CMP":      Instruction("CMP",      "0101", 2, [(OperandType.SRC1,), (OperandType.SRC2,)], r" *R([0-9]) *, *R([0-9])"),
-    "STD":      Instruction("STD",      "0110", 2, [(OperandType.SRC1,), (OperandType.IMMEDIATE,), (OperandType.SRC2,)], r" *R([0-9]) *, *([0-9A-F]{1,3}) *\( *R([0-9]) *\)"),
+    "STD":      Instruction("STD",      "0110", 2, [(OperandType.SRC2,), (OperandType.IMMEDIATE,), (OperandType.SRC1,)], r" *R([0-9]) *, *([0-9A-F]{1,3}) *\( *R([0-9]) *\)"),
     "NOT":      Instruction("NOT",      "0111", 2, [(OperandType.DEST, OperandType.SRC1)], r" *R([0-9])"),
     "NEG":      Instruction("NEG",      "1000", 2, [(OperandType.DEST, OperandType.SRC1)], r" *R([0-9])"),
     "INC":      Instruction("INC",      "1001", 2, [(OperandType.DEST, OperandType.SRC1)], r" *R([0-9])"),

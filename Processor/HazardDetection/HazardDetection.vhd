@@ -1,3 +1,7 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.numeric_std.all;
+
 ENTITY HazardDetector IS
     PORT (
         i_aRs1, i_aRs2, i_aRd : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
