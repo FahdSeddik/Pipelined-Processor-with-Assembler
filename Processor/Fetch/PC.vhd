@@ -60,12 +60,12 @@ BEGIN
       ELSIF r_state = GET_RESET_ADDRESS THEN
         r_reset_counter := r_reset_counter + 1;
         IF r_reset_counter = 1 THEN
-          r_reset_address := x"0000" & i_instruction(15 DOWNTO 0);
-          r_reset_address := r_reset_address SLL 16;
+          r_reset_address(31 DOWNTO 16) := i_instruction;
+          -- r_reset_address := r_reset_address SLL 16;
           r_pc := (0 => '1', OTHERS => '0'); -- start reading at 0x00000000
           o_address <= r_pc;
         ELSIF r_reset_counter = 2 THEN
-          r_reset_address := r_reset_address OR (x"0000" & i_instruction(15 DOWNTO 0));
+          r_reset_address(15 DOWNTO 0) := i_instruction;
           r_pc := r_reset_address; -- address is ready
           o_address <= r_pc;
           r_state := NORMAL; -- go back to normal
