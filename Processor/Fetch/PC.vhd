@@ -10,7 +10,7 @@ ENTITY PC IS
     i_freeze : IN STD_LOGIC := '0';
     i_interrupt : IN STD_LOGIC := '0';
     i_reset : IN STD_LOGIC := '0';
-    i_instruction : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
+    i_instruction : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     i_branch_address : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     i_branch_we : IN STD_LOGIC := '0';
     i_predict_we : IN STD_LOGIC := '0';
