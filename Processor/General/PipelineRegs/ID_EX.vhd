@@ -8,6 +8,7 @@ ENTITY ID_EX IS
     -- Input control signals
     i_WB : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); -- o_WB[1]->normal o_WB[0]->on if swap
     i_stackControl : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --to determine what types of stack instructions is needed
+    i_int : IN STD_LOGIC := '0'; --interrupt
     i_memWrite : IN STD_LOGIC := '0'; --store
     i_memRead : IN STD_LOGIC := '0'; --load
     i_inputEnable : IN STD_LOGIC := '0'; --on in
@@ -46,6 +47,7 @@ ENTITY ID_EX IS
     o_aRs1 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
     o_aRs2 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
     o_aRd : OUT STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
+    o_int : OUT STD_LOGIC := '0'; --interrupt
     -- Input no-logic wires
     o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0')
   );
@@ -98,8 +100,9 @@ BEGIN
         o_aRs2 <= i_aRs2;
         o_aRd <= i_aRd;
         o_bitpredict <= i_branchPredict;
+        o_int <= i_int;
       END IF;
-      IF i_flush = '1' THEN
+      IF i_flush = '1' AND i_int = '0' THEN
         o_pc <= (OTHERS => '0');
         o_WB <= (OTHERS => '0');
         o_stackControl <= (OTHERS => '0');
@@ -119,6 +122,7 @@ BEGIN
         o_aRs2 <= (OTHERS => '0');
         o_aRd <= (OTHERS => '0');
         o_bitpredict <= '0';
+        o_int <= '0';
       END IF;
     END IF;
   END PROCESS;

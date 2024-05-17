@@ -9,12 +9,14 @@ ENTITY IF_ID IS
     i_reset : IN STD_LOGIC := '0';
     i_en : IN STD_LOGIC := '0';
     i_flush : IN STD_LOGIC := '0';
+    i_int : IN STD_LOGIC := '0';
     i_pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     i_instruction : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
     i_immediate : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
     -- outputs
     o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     o_instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
+    o_int : OUT STD_LOGIC := '0';
     o_immediate : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0')
   );
 END ENTITY IF_ID;
@@ -32,11 +34,13 @@ BEGIN
         o_pc <= i_pc;
         o_instruction <= i_instruction;
         o_immediate <= i_immediate;
+        o_int <= i_int;
       END IF;
-      IF i_flush = '1' THEN
+      IF i_flush = '1' AND i_int = '0' THEN
         o_pc <= (OTHERS => '0');
         o_instruction <= (OTHERS => '0');
         o_immediate <= (OTHERS => '0');
+        o_int <= '0';
       END IF;
     END IF;
   END PROCESS;

@@ -9,6 +9,7 @@ ENTITY MEM_WB IS
     i_reset : IN STD_LOGIC := '0'; -- reset signal
     i_en : IN STD_LOGIC := '0';
     i_flush : IN STD_LOGIC := '0';
+    i_int : IN STD_LOGIC;
     i_memRead : IN STD_LOGIC;
     i_writeBack : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
     i_readData : IN STD_LOGIC_VECTOR(31 DOWNTO 0);

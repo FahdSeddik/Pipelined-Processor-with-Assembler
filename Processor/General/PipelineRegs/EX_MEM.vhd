@@ -12,6 +12,7 @@ ENTITY EX_MEM IS
     i_memRead : IN STD_LOGIC := '0'; --load
     i_isProtect : IN STD_LOGIC := '0';
     i_isFree : IN STD_LOGIC := '0';
+    i_int : IN STD_LOGIC := '0';
     -- Input data signals
     i_aluResult : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     i_vRs2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
@@ -32,7 +33,8 @@ ENTITY EX_MEM IS
     o_aRd : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
     o_aRs2 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
     o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-    o_flag : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+    o_flag : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    o_int : OUT STD_LOGIC
   );
 END ENTITY EX_MEM;
 ARCHITECTURE imp OF EX_MEM IS
@@ -66,8 +68,9 @@ BEGIN
         o_aRs2 <= i_aRs2;
         o_pc <= i_pc;
         o_flag <= i_flag;
+        o_int <= i_int;
       END IF;
-      IF i_flush = '1' THEN
+      IF i_flush = '1' AND i_int = '0' THEN
         o_WB <= (OTHERS => '0');
         o_stackControl <= (OTHERS => '0');
         o_memWrite <= '0';
@@ -80,6 +83,7 @@ BEGIN
         o_aRs2 <= (OTHERS => '0');
         o_pc <= (OTHERS => '0');
         o_flag <= (OTHERS => '0');
+        o_int <= '0';
       END IF;
     END IF;
   END PROCESS;

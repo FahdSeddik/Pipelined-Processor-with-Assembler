@@ -42,19 +42,21 @@ ARCHITECTURE struct OF Processor IS
     PORT (
       -- inputs
       i_clk : IN STD_LOGIC := '0';
-      i_reset : IN STD_LOGIC := '0'; -- reset signal
+      i_reset : IN STD_LOGIC := '0';
       i_en : IN STD_LOGIC := '0';
-      i_flush : IN STD_LOGIC := '0'; -- flush signal
+      i_flush : IN STD_LOGIC := '0';
+      i_int : IN STD_LOGIC := '0';
       i_pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       i_instruction : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
       i_immediate : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
       -- outputs
       o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       o_instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
+      o_int : OUT STD_LOGIC := '0';
       o_immediate : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0')
     );
   END COMPONENT;
-
+  SIGNAL w_FD_int : STD_LOGIC := '0';
   SIGNAL w_FD_PC_1, w_FD_PC_2 : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_FD_instruction_1, w_FD_instruction_2 : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_FD_immediate_1, w_FD_immediate_2 : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
@@ -113,6 +115,7 @@ ARCHITECTURE struct OF Processor IS
       -- Input control signals
       i_WB : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); -- o_WB[1]->normal o_WB[0]->on if swap
       i_stackControl : IN STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --to determine what types of stack instructions is needed
+      i_int : IN STD_LOGIC := '0'; --interrupt
       i_memWrite : IN STD_LOGIC := '0'; --store
       i_memRead : IN STD_LOGIC := '0'; --load
       i_inputEnable : IN STD_LOGIC := '0'; --on in
@@ -133,7 +136,7 @@ ARCHITECTURE struct OF Processor IS
       -- Input no-logic wires
       i_pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       -- Output ### ADD SEMI-COLON ABOVE
-      o_bitpredict : OUT STD_LOGIC;
+      o_bitpredict : OUT STD_LOGIC := '0';
       o_WB : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');
       o_stackControl : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');
       o_memWrite : OUT STD_LOGIC := '0';
@@ -151,10 +154,12 @@ ARCHITECTURE struct OF Processor IS
       o_aRs1 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
       o_aRs2 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
       o_aRd : OUT STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
+      o_int : OUT STD_LOGIC := '0'; --interrupt
       -- Input no-logic wires
       o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0')
     );
   END COMPONENT;
+  SIGNAL w_DE_int : STD_LOGIC := '0';
   SIGNAL w_DE_WB_1, w_DE_WB_2 : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_DE_stackControl_1, w_DE_stackControl_2 : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_DE_memWrite_1, w_DE_memWrite_2 : STD_LOGIC := '0';
@@ -216,6 +221,7 @@ ARCHITECTURE struct OF Processor IS
       i_memRead : IN STD_LOGIC := '0'; --load
       i_isProtect : IN STD_LOGIC := '0';
       i_isFree : IN STD_LOGIC := '0';
+      i_int : IN STD_LOGIC := '0';
       -- Input data signals
       i_aluResult : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       i_vRs2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
@@ -236,9 +242,11 @@ ARCHITECTURE struct OF Processor IS
       o_aRd : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
       o_aRs2 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
       o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-      o_flag : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+      o_flag : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+      o_int : OUT STD_LOGIC
     );
   END COMPONENT EX_MEM;
+  SIGNAL w_EM_int : STD_LOGIC := '0';
   SIGNAL w_EM_aluResult_1 : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_EM_vRs2_1 : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_EM_flags_1 : STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');
@@ -299,7 +307,8 @@ ARCHITECTURE struct OF Processor IS
       i_clk : IN STD_LOGIC := '0';
       i_reset : IN STD_LOGIC := '0'; -- reset signal
       i_en : IN STD_LOGIC := '0';
-      i_flush : IN STD_LOGIC := '0'; -- flush signal
+      i_flush : IN STD_LOGIC := '0';
+      i_int : IN STD_LOGIC;
       i_memRead : IN STD_LOGIC;
       i_writeBack : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
       i_readData : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -314,9 +323,11 @@ ARCHITECTURE struct OF Processor IS
       o_result : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       o_rdstAddr : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
       o_rs2Addr : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-      o_rs2Data : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+      o_rs2Data : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      o_int : OUT STD_LOGIC
     );
   END COMPONENT MEM_WB;
+  SIGNAL w_MW_int : STD_LOGIC := '0';
   SIGNAL w_MW_memRead_1, w_MW_memRead_2 : STD_LOGIC := '0';
   SIGNAL w_MW_writeBack_1, w_MW_writeBack_2 : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_MW_readData_1, w_MW_readData_2 : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
@@ -461,11 +472,13 @@ BEGIN
     i_pc => w_FD_PC_1,
     i_en => NOT w_Hazard,
     i_flush => w_FD_flush,
+    i_int => i_interrupt,
     i_instruction => w_FD_instruction_1,
     i_immediate => w_FD_immediate_1,
     o_pc => w_FD_PC_2,
     o_instruction => w_FD_instruction_2,
-    o_immediate => w_FD_immediate_2
+    o_immediate => w_FD_immediate_2,
+    o_int => w_FD_int
   );
 
   D : DECODE PORT MAP(
@@ -517,6 +530,7 @@ BEGIN
     i_reset => i_reset OR w_Ex_flush(0), -- ????? FLUSHHHH>>????
     i_en => '1',
     i_flush => w_DE_flush, --replace with flush expression
+    i_int => w_FD_int,
     -- Input control signals
     i_WB => w_DE_WB_1,
     i_stackControl => w_DE_stackControl_1,
@@ -558,6 +572,7 @@ BEGIN
     o_aRs1 => w_DE_aRs1_2,
     o_aRs2 => w_DE_aRs2_2,
     o_aRd => w_DE_aRd_2,
+    o_int => w_DE_int,
     -- Input no-logic wires
     o_pc => w_DE_PC_2
   );
@@ -611,6 +626,7 @@ BEGIN
     i_memRead => w_DE_memRead_2,
     i_isProtect => w_DE_isProtect_2,
     i_isFree => w_DE_isFree_2,
+    i_int => w_DE_int,
     -- Input data signals
     i_aluResult => w_EM_aluResult_1,
     i_vRs2 => w_EM_vRs2_1,
@@ -631,7 +647,8 @@ BEGIN
     o_aRd => w_EM_aRd,
     o_aRs2 => w_EM_aRs2,
     o_pc => w_EM_PC,
-    o_flag => w_EM_flag
+    o_flag => w_EM_flag,
+    o_int => w_EM_int
   );
 
   M : Memory PORT MAP(
@@ -681,6 +698,7 @@ BEGIN
     i_rdstAddr => w_MW_rdstAddr_1,
     i_rs2Addr => w_MW_rs2Addr_1,
     i_rs2Data => w_MW_rs2Data_1,
+    i_int => w_EM_int,
     -- outputs
     o_memRead => w_MW_memRead_2,
     o_writeBack => w_MW_writeBack_2,
