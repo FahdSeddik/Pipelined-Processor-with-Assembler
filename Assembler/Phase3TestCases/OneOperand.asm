@@ -6,6 +6,7 @@
 # ---------- Don't forget to Reset before you start anything ---------- #
 
 .ORG 0  #this means the the following line would be  at address  0 , and this is the reset address
+00
 A0
 
 .ORG A0
