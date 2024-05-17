@@ -1,29 +1,24 @@
-#	All numbers are in hex format
-#	We always start by reset signal (in phase one, it just reset all registers)
-# 	This is a commented line
-#	You should ignore empty lines and commented ones
-# 	add as much NOPs (or for example `LDM R7, 0` (a filling instruction)) as you want to avoid hazards (as a software solution, just in 
-#          phase one)
-# ---------- Don't forget to Reset before you start anything ---------- #
-# LDM, NOT, DEC, MOV, OR, CMP
+# all numbers in hex format
+# we always start by reset signal
+# this is a commented line
+# You should ignore empty lines
 
-.org 0			# means the code start at address zero, this could be written in 
-			# several places in the file and the assembler should handle it in Phase 2
+# ---------- Don't forget to Reset before you start anything ---------- #
+
+.ORG 0  #this means the the following line would be  at address  0 , and this is the reset address
 0
-2
-LDM R0, 1
-LDM R1, AAAA
-LDM R2, FFFF
-DEC R0
-MOV R4, R1
-NOT R1
-MOV R3, R0
-DEC R0
-CMP R4, R2
-OR R5, R1, R4
-MOV R6, R0
-CMP R2, R4
-CMP R5, R0
-OR R7, R4, R3
-NOT R6
-DEC R0
+A0
+
+.ORG A0
+NOP            #No change
+NOT R1         #R1 =FFFFFFFF , C--> no change, N --> 1, Z --> 0
+INC R1	       #R1 =00000000 , C --> 1 , N --> 0 , Z --> 1
+IN R1	       #R1= 5,add 5 on the in port,flags no change	
+IN R2          #R2= 10,add 10 on the in port, flags no change
+NOT R2	       #R2= FFFFFFEF, C--> no change, N -->1,Z-->0
+INC R1         #R1= 6, C --> 0, N -->0, Z-->0
+OUT R1
+OUT R2
+DEC R2	       #R2= FFFFFFEE, C--> 0, N -->1, Z-->0
+NEG R2	       #R2= 00000012, C--> 0, N -->0, Z-->0
+OUT R2
