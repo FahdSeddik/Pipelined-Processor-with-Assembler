@@ -6,6 +6,7 @@
 # ---------- Don't forget to Reset before you start anything ---------- #
 
 .ORG 0  #this means the the following line would be  at address  0 , and this is the reset address
+00
 300
 
 .ORG 300
@@ -24,8 +25,8 @@ ADD R5, R2, R1   #R5=1E
 IN R5            #R5= 10 
 STD R2,200(R5)   #M[210]=5 - address is hexa
 
-STD R1,201(R5)   #M[211]=19 - address is hexa
-LDD R3,201(R5)   #R3=19
+STD R1,202(R5)   #M[211]=19 - address is hexa
+LDD R3,202(R5)   #R3=19
 LDD R4,200(R5)   #R4=5
 # Load use & memory to ALU
 ADD R5, R4, R3   #R5=1E

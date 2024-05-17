@@ -584,7 +584,7 @@ BEGIN
     i_aRs2_ex => w_EM_aRs2,
     i_WB_ex => w_EM_WB,
     --data signals from write back
-    i_vResult_mem => w_MW_result_2,
+    i_vResult_mem => w_WD_data0,
     i_vRs2_mem => w_MW_rs2Data_2,
     i_aRd_mem => w_MW_rdstAddr_2,
     i_aRs2_mem => w_MW_rs2Addr_2,
