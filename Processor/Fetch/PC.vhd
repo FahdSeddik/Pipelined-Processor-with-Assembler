@@ -53,7 +53,7 @@ BEGIN
     ELSIF i_branch_we = '1' AND rising_edge(i_clk) THEN
       r_pc := i_branch_address;
       o_address <= r_pc;
-    ELSIF rising_edge(i_predict_we) THEN
+    ELSIF i_predict_we = '1' AND rising_edge(i_clk) THEN
       r_pc := i_predict_address;
       o_address <= r_pc;
     ELSIF rising_edge(i_clk) THEN

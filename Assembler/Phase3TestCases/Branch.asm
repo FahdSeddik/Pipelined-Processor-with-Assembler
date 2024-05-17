@@ -10,6 +10,7 @@
 10
 
 .ORG 2          #this hw interrupt handler
+00
 900
 
 .ORG 900 #this is hw int
