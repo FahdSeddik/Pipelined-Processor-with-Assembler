@@ -104,5 +104,8 @@ force -freeze sim:/processor/i_reset 1 0
 run 10 ps
 
 force -freeze sim:/processor/i_reset 0 0
+force -freeze sim:/processor/i_port x\"00000005\" 0
+run 70ps
+force -freeze sim:/processor/i_port x\"00000010\" 0
 
 run 3000 ps
