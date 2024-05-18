@@ -48,7 +48,7 @@ w_aluOP <= "0001" WHEN i_opCode = "1010" ELSE "0000";
 w_WB <= "10" WHEN i_opCode(3) = '1' ELSE "00";
 w_stackControl <= "10" WHEN i_opCode = "0001" OR i_opCode = "1001" ELSE
                   "01" WHEN i_opCode = "0110" ELSE "00";
-w_memWrite <= '1' WHEN i_opCode = "0001" else '0';
+w_memWrite <= '1' WHEN i_opCode = "0001" or i_opCode = "0110" ELSE '0';
 w_memRead <= '1' WHEN i_opCode = "1001" else '0';
 w_inputEnable <= '1' WHEN i_opCode = "1000" ELSE '0';
 w_outputEnable <= '1' WHEN i_opCode = "0000" ELSE '0';

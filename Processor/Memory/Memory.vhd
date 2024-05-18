@@ -1,5 +1,7 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
+use IEEE.std_logic_unsigned.all;
+
 
 ENTITY Memory IS
     PORT (
@@ -91,7 +93,7 @@ BEGIN
         '0';
 
     -- dataIn is the data to be written to memory. PC when stackControl = 01 or 11, flag register when stackControl = 11 and s_interruptType = 1, rs2Data otherwise
-    s_dataIn <= i_pc WHEN (i_stackControl = "11" AND s_interruptType /= '1') OR i_stackControl = "01" ELSE
+    s_dataIn <= i_pc+1 WHEN (i_stackControl = "11" AND s_interruptType /= '1') OR i_stackControl = "01" ELSE
         x"0000000" & i_flag WHEN (i_stackControl = "11" AND s_interruptType = '1')
         ELSE
         i_rs2Data;

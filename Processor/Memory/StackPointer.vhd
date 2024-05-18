@@ -19,7 +19,7 @@ BEGIN
     BEGIN
         IF i_rst = '1' THEN
             -- initial value of SP is (2^12-1)
-            s_q <= x"00000FFD";
+            s_q <= x"00000FFE";
         ELSIF falling_edge(i_clk) THEN
             IF i_push = '1' THEN
                 s_q <= s_q - 2;

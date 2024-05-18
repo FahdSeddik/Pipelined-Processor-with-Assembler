@@ -43,7 +43,8 @@ w_stackControl <=   "01" WHEN i_opCode = "0001" ELSE
                     "11" WHEN i_opCode = "0011" ELSE
                     "00";
 w_memWrite <= '0';
-w_memRead <= '0';
+w_memRead <= '1' WHEN i_opCode = "0011"  or i_opCode = "0001" ELSE
+            '0';
 w_isRti <=  '1' WHEN i_opCode = "0011" ELSE
             '0';
 w_inputEnable <= '0';

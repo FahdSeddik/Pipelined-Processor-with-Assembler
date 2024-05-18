@@ -744,7 +744,7 @@ BEGIN
     i_bit_predictor => w_DE_branchPredict,
     i_z_flag => w_EM_flags_1(0),
     i_return => w_MemReturn,
-    i_branch_adress => w_MW_readData_2,
+    i_branch_adress => w_MW_readData_1,
     -- outputs
     o_branch_control => w_BF_WE,
     o_branch_adress => w_BF_branchAddress
