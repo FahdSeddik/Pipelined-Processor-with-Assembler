@@ -26,7 +26,7 @@ ARCHITECTURE behavioral OF PC IS
   TYPE state_type IS (NORMAL, GET_RESET_ADDRESS, GET_INTERRUPT_ADDRESS);
   -- constants
   CONSTANT c_exception_handler : STD_LOGIC_VECTOR(31 DOWNTO 0) := (11 => '1', OTHERS => '0'); -- TODO change to real exception handler
-  signal s_interrupt_return : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+  SIGNAL s_interrupt_return : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
 BEGIN
 
   main_loop : PROCESS (i_clk, i_reset, i_interrupt, i_freeze, i_branch_we, i_predict_we)
@@ -36,7 +36,7 @@ BEGIN
     VARIABLE r_reset_counter : INTEGER := 0; -- take the address on 2 cycles
     VARIABLE r_interrupt_address : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     VARIABLE r_interrupt_counter : INTEGER := 0; -- take the address on 2 cycles
-    
+
   BEGIN
     IF i_reset = '1' AND (r_state /= GET_RESET_ADDRESS) THEN
       r_state := GET_RESET_ADDRESS;
@@ -54,10 +54,10 @@ BEGIN
       o_address <= r_pc;
     ELSIF i_freeze = '1' THEN
       o_address <= r_pc; -- freeze -> do nothing
-    ELSIF i_branch_we = '1' AND rising_edge(i_clk) THEN
+    ELSIF i_branch_we = '1' AND rising_edge(i_clk) AND (r_state /= GET_INTERRUPT_ADDRESS) THEN
       r_pc := i_branch_address;
       o_address <= r_pc;
-    ELSIF i_predict_we = '1' AND rising_edge(i_clk) THEN
+    ELSIF i_predict_we = '1' AND rising_edge(i_clk) AND (r_state /= GET_INTERRUPT_ADDRESS) THEN
       r_pc := i_predict_address;
       o_address <= r_pc;
     ELSIF rising_edge(i_clk) THEN

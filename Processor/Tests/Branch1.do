@@ -98,9 +98,8 @@ run 40 ps
 force -freeze sim:/processor/i_port 00000000000000000000000000000101 0
 # 380 ps
 
-run 40 ps
+run 10 ps
 force -freeze sim:/processor/i_interrupt 1 0
-# 420
 run 10 ps
 force -freeze sim:/processor/i_interrupt 0 0
 

@@ -84,7 +84,7 @@ run 140 ps
 #370 ps
 force -freeze sim:/processor/i_port x\"00000700\" 0
 
-run 30 ps
+run 110 ps
 force -freeze sim:/processor/i_interrupt 1 0
 run 10 ps
 force -freeze sim:/processor/i_interrupt 0 0
