@@ -90,7 +90,7 @@ add wave -position end  sim:/processor/ExHReg/o_exception_overflow
 add wave -position end  sim:/processor/E/s_flags
 add wave -position 53 sim:/processor/E/*
 add wave -position 101 sim:/processor/DE/*
-mem load -i D:/gam3a/arch/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
+mem load -i D:/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
 
 force -freeze sim:/processor/i_clk 1 0, 0 {5 ps} -r {10 ps}
 
@@ -106,16 +106,21 @@ run 10 ps
 force -freeze sim:/processor/i_port 11111111111111111111111111111111 0
 run 10 ps
 force -freeze sim:/processor/i_port 11111111111111111111001100100000 0
+#60
 run 80 ps
 force -freeze sim:/processor/i_port 00000000000000000000000000010000 0
+#140
 run 100 ps
 force -freeze sim:/processor/i_port 00000000000000000000000000010000 0
 run 10 ps
-force -freeze sim:/processor/i_port 00000000000000000000000010010001 0
+force -freeze sim:/processor/i_port 00000000000000000000000000011001 0
+#250
 run 80 ps
 force -freeze sim:/processor/i_port 00000000000000000000001000010001 0
+#330
 run 20 ps
 force -freeze sim:/processor/i_port 00000000000000000000001000010001 0
 run 60 ps
 force -freeze sim:/processor/i_port 00000000000000000000000100000000 0
+
 run 3000 ps
