@@ -29,6 +29,7 @@ vsim -gui work.processor
 add wave -position end  sim:/processor/i_clk
 add wave -position end  sim:/processor/i_reset
 add wave -position end  sim:/processor/i_port
+add wave -position end  sim:/processor/i_interrupt
 add wave -position end  sim:/processor/o_port
 
 add wave -position end  sim:/processor/F/*
@@ -94,8 +95,9 @@ add wave -position end  sim:/processor/ExHReg/o_exception_memory_violation
 add wave -position end  sim:/processor/ExHReg/o_exception_overflow
 add wave -position end  sim:/processor/E/s_flags
 
-mem load -i D:/gam3a/arch/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
+mem load -i D:/UNI/Senior-1/spring/Arch/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
 add wave -position insertpoint sim:/processor/M/*
+add wave -position insertpoint sim:/processor/M/DataMemory1/*
 add wave -position 26 sim:/processor/D/*
 add wave -position end sim:/processor/BP/*
 add wave -position end sim:/processor/BC/*
@@ -107,7 +109,15 @@ run 10 ps
 
 force -freeze sim:/processor/i_reset 0 0
 force -freeze sim:/processor/i_port x\"00000005\" 0
-run 70ps
-force -freeze sim:/processor/i_port x\"00000010\" 0
 
-run 3000 ps
+run
+run
+run
+force -freeze sim:/processor/i_interrupt 1 0
+run
+force -freeze sim:/processor/i_interrupt 0 0
+run
+run
+run
+run
+run
