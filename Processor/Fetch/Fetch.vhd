@@ -17,6 +17,7 @@ ENTITY Fetch IS
     i_clk : IN STD_LOGIC := '0';
     i_reset : IN STD_LOGIC := '0';
     i_interrupt : IN STD_LOGIC := '0';
+    i_flush : IN STD_LOGIC := '0';
     -- outputs
     o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     o_instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
@@ -72,7 +73,8 @@ BEGIN
       i_input => w_mux_out,
       o_instruction => w_immediate_instruction_out,
       o_immediate => o_immediate,
-      i_enable => NOT(w_pc_stall_out)
+      i_enable => NOT(w_pc_stall_out),
+      i_flush => i_flush
     );
 
   NOPHandler : ENTITY work.NOPHandler
@@ -82,6 +84,7 @@ BEGIN
       o_instruction => o_instruction
     );
 
-  o_pc <= w_pc_out when i_interrupt /= '1' else w_interrupt_return;
+  o_pc <= w_pc_out WHEN i_interrupt /= '1' ELSE
+    w_interrupt_return;
 
 END ARCHITECTURE behavioral;

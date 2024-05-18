@@ -31,6 +31,7 @@ ARCHITECTURE struct OF Processor IS
       i_clk : IN STD_LOGIC := '0';
       i_reset : IN STD_LOGIC := '0';
       i_interrupt : IN STD_LOGIC := '0';
+      i_flush : IN STD_LOGIC := '0';
       -- outputs
       o_pc : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
       o_instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
@@ -462,7 +463,8 @@ BEGIN
     i_reset => i_reset,
     o_pc => w_FD_PC_1,
     o_instruction => w_FD_instruction_1,
-    o_immediate => w_FD_immediate_1
+    o_immediate => w_FD_immediate_1,
+    i_flush => w_FD_flush
   );
 
   FD : IF_ID PORT MAP(

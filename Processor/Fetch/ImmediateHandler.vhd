@@ -9,6 +9,7 @@ ENTITY ImmediateHandler IS
     i_reset : IN STD_LOGIC; -- added reset signal
     i_input : IN STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
     i_enable : IN STD_LOGIC := '1'; -- to enable normal logic
+    i_flush : IN STD_LOGIC := '0'; -- to flush the pipeline
     -- outputs
     o_instruction : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
     o_immediate : OUT STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0')
@@ -16,7 +17,7 @@ ENTITY ImmediateHandler IS
 END ENTITY ImmediateHandler;
 
 ARCHITECTURE behavioral OF ImmediateHandler IS
-  TYPE t_state IS (instruction_wait, imediate_wait);
+  TYPE t_state IS (instruction_wait, imediate_wait, delay);
   -- Registers
   SIGNAL r_state : t_state := instruction_wait;
   SIGNAL r_instruction : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
@@ -31,6 +32,10 @@ BEGIN
       r_instruction <= (OTHERS => '0');
       r_immediate <= (OTHERS => '0');
       r_temp <= (OTHERS => '0');
+    ELSIF rising_edge(i_clk) THEN
+      IF i_flush = '1' THEN
+        r_state <= instruction_wait;
+      END IF;
     ELSIF falling_edge(i_clk) AND i_enable = '1' THEN
       CASE r_state IS
         WHEN instruction_wait =>
