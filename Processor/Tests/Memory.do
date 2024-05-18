@@ -107,17 +107,16 @@ force -freeze sim:/processor/i_port 11111111111111111111111111111111 0
 run 10 ps
 force -freeze sim:/processor/i_port 11111111111111111111001100100000 0
 #60
-run 80 ps
+run 90 ps
 force -freeze sim:/processor/i_port 00000000000000000000000000010000 0
 #140
 run 100 ps
 force -freeze sim:/processor/i_port 00000000000000000000000000010000 0
-run 10 ps
+run 20 ps
 force -freeze sim:/processor/i_port 00000000000000000000000000011001 0
-#250
-run 80 ps
+#270 f3ln
+run 90 ps
 force -freeze sim:/processor/i_port 00000000000000000000001000010001 0
-#330
 run 20 ps
 force -freeze sim:/processor/i_port 00000000000000000000001000010001 0
 run 60 ps
