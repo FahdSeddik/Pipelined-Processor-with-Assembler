@@ -98,7 +98,7 @@ BEGIN
     -- dataIn is the data to be written to memory. PC when stackControl = 01 or 11, flag register when stackControl = 11 and s_interruptType = 1, rs2Data otherwise
     s_dataIn <= i_pc+1 WHEN (i_stackControl = "11" AND s_interruptType /= '1') OR i_stackControl = "01" ELSE
         i_pc when i_interrupt = '1' AND s_interruptType = '1' ELSE
-        x"0000000" & i_flag WHEN (s_interruptType = '0') ELSE
+        x"0000000" & i_flag WHEN i_interrupt = '1' AND s_interruptType = '0' ELSE
         i_rs2Data;
 
     DataMemory1 : DataMemory PORT MAP(
