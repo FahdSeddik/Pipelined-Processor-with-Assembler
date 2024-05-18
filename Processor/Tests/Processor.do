@@ -49,7 +49,7 @@ add wave -position end sim:/processor/D/RF/ram
 add wave -position insertpoint sim:/processor/EM/*
 add wave -position insertpoint sim:/processor/M/*
 
-mem load -i D:/UNI/Senior-1/spring/Arch/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
+mem load -i D:/gam3a/arch/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
 add wave -position insertpoint sim:/processor/M/*
 add wave -position insertpoint sim:/processor/M/DataMemory1/*
 add wave -position 26 sim:/processor/D/*
