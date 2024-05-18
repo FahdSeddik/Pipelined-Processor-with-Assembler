@@ -17,6 +17,7 @@ ENTITY PC IS
     i_predict_address : IN STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     -- outputs
     o_address : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+    o_interrupt_return : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     o_stall : OUT STD_LOGIC := '0'
   );
 END ENTITY PC;
@@ -25,6 +26,7 @@ ARCHITECTURE behavioral OF PC IS
   TYPE state_type IS (NORMAL, GET_RESET_ADDRESS, GET_INTERRUPT_ADDRESS);
   -- constants
   CONSTANT c_exception_handler : STD_LOGIC_VECTOR(31 DOWNTO 0) := (11 => '1', OTHERS => '0'); -- TODO change to real exception handler
+  signal s_interrupt_return : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
 BEGIN
 
   main_loop : PROCESS (i_clk, i_reset, i_interrupt, i_freeze, i_branch_we, i_predict_we)
@@ -34,6 +36,7 @@ BEGIN
     VARIABLE r_reset_counter : INTEGER := 0; -- take the address on 2 cycles
     VARIABLE r_interrupt_address : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
     VARIABLE r_interrupt_counter : INTEGER := 0; -- take the address on 2 cycles
+    
   BEGIN
     IF i_reset = '1' AND (r_state /= GET_RESET_ADDRESS) THEN
       r_state := GET_RESET_ADDRESS;
@@ -42,6 +45,7 @@ BEGIN
       o_stall <= '1';
     ELSIF i_interrupt = '1' AND (r_state /= GET_INTERRUPT_ADDRESS) THEN
       r_state := GET_INTERRUPT_ADDRESS;
+      s_interrupt_return <= r_pc;
       r_pc := (1 => '1', OTHERS => '0'); -- start reading at 0x00000002
       o_address <= r_pc;
       o_stall <= '1';
@@ -94,4 +98,5 @@ BEGIN
       END IF;
     END IF;
   END PROCESS;
+  o_interrupt_return <= s_interrupt_return;
 END ARCHITECTURE behavioral;

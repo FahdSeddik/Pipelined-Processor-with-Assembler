@@ -31,6 +31,7 @@ ARCHITECTURE behavioral OF Fetch IS
   SIGNAL w_pc_stall_out : STD_LOGIC := '0';
   SIGNAL w_immediate_instruction_out : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_pc_out : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+  SIGNAL w_interrupt_return : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
 
 BEGIN
   -- components
@@ -47,6 +48,7 @@ BEGIN
       i_clk => i_clk,
       i_reset => i_reset,
       o_address => w_pc_out,
+      o_interrupt_return => w_interrupt_return,
       o_stall => w_pc_stall_out
     );
 
@@ -80,6 +82,6 @@ BEGIN
       o_instruction => o_instruction
     );
 
-  o_pc <= w_pc_out;
+  o_pc <= w_pc_out when i_interrupt /= '1' else w_interrupt_return;
 
 END ARCHITECTURE behavioral;

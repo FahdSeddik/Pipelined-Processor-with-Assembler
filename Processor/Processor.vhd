@@ -284,6 +284,7 @@ ARCHITECTURE struct OF Processor IS
       i_rs2Data : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       i_pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       i_flag : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+      i_interrupt : IN STD_LOGIC;
       -- output
       o_memRead : OUT STD_LOGIC;
       o_writeBack : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
@@ -667,6 +668,7 @@ BEGIN
     i_rs2Data => w_EM_vRs2,
     i_pc => w_EM_PC,
     i_flag => w_EM_flag,
+    i_interrupt => w_EM_int,
     -- output
     o_memRead => w_MW_memRead_1,
     o_writeBack => w_MW_writeBack_1,

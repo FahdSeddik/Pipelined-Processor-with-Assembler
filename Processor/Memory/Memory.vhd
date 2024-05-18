@@ -22,6 +22,7 @@ ENTITY Memory IS
         i_rs2Data : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         i_pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         i_flag : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+        i_interrupt : IN STD_LOGIC;
         -- output
         o_memRead : OUT STD_LOGIC;
         o_writeBack : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
@@ -78,28 +79,29 @@ BEGIN
         IF rising_edge(i_clk) THEN
             IF s_interruptType = '1' THEN
                 s_interruptType <= '0';
-            ELSIF i_stackControl = "11" THEN
+            ELSIF i_stackControl = "11" or i_interrupt = '1' THEN
                 s_interruptType <= '1';
             END IF;
         END IF;
     END PROCESS;
 
     -- s_stackControl <= (i_stackControl(1) xor s_interruptType) & i_stackControl(0);
-    s_address <= i_result WHEN i_stackControl = "00" ELSE
+    s_address <= i_result WHEN i_stackControl = "00" AND i_interrupt /= '1' ELSE
         s_stachPointer;
-    s_push <= '1' WHEN i_stackControl /= "00" AND i_writeBack(1) = '0' ELSE
+    s_push <= '1' WHEN (i_stackControl /= "00" AND i_writeBack(1) = '0') or i_interrupt = '1' ELSE
         '0';
     s_pop <= '1' WHEN i_stackControl /= "00" AND i_writeBack(1) = '1' ELSE
         '0';
 
     -- dataIn is the data to be written to memory. PC when stackControl = 01 or 11, flag register when stackControl = 11 and s_interruptType = 1, rs2Data otherwise
     s_dataIn <= i_pc+1 WHEN (i_stackControl = "11" AND s_interruptType /= '1') OR i_stackControl = "01" ELSE
+        i_pc when i_interrupt = '1' ELSE
         x"0000000" & i_flag WHEN (i_stackControl = "11" AND s_interruptType = '1')
         ELSE
         i_rs2Data;
     DataMemory1 : DataMemory PORT MAP(
         i_clk => i_clk,
-        i_memWrite => i_memWrite,
+        i_memWrite => i_memWrite or i_interrupt,
         i_memRead => i_memRead,
         i_protect => i_protect,
         i_free => i_free,
