@@ -199,6 +199,8 @@ ARCHITECTURE struct OF Processor IS
     i_vResult_ex, i_vRs2_ex : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     i_aRd_ex, i_aRs2_ex : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     i_WB_ex : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+    i_pop_flag : IN STD_LOGIC;
+    i_mem_flag : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
     --data signals from write back
     i_vResult_mem, i_vRs2_mem : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     i_aRd_mem, i_aRs2_mem : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -299,7 +301,9 @@ ARCHITECTURE struct OF Processor IS
       o_return : OUT STD_LOGIC;
       o_interruptType : OUT STD_LOGIC;
       o_flush : OUT STD_LOGIC;
-      o_freeze : OUT STD_LOGIC
+      o_freeze : OUT STD_LOGIC;
+      o_pop_flag : OUT STD_LOGIC;
+      o_flag : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
   END COMPONENT;
 
@@ -335,6 +339,8 @@ ARCHITECTURE struct OF Processor IS
   SIGNAL w_MW_rdstAddr_1, w_MW_rdstAddr_2 : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_MW_rs2Addr_1, w_MW_rs2Addr_2 : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
   SIGNAL w_MW_rs2Data_1, w_MW_rs2Data_2 : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
+  SIGNAL w_M_flag : STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');
+  SIGNAL w_M_pop_flags : STD_LOGIC := '0';
   -- ###################################
 
   -- ###################################
@@ -601,6 +607,8 @@ BEGIN
     i_aRd_ex => w_EM_aRd,
     i_aRs2_ex => w_EM_aRs2,
     i_WB_ex => w_EM_WB,
+    i_pop_flag => w_M_pop_flags,
+    i_mem_flag => w_M_flag,
     --data signals from write back
     i_vResult_mem => w_WD_data0,
     i_vRs2_mem => w_MW_rs2Data_2,
@@ -618,7 +626,7 @@ BEGIN
   EM : EX_MEM PORT MAP(
     i_clk => i_clk,
     i_reset => i_reset OR w_Ex_flush(1),
-    i_en => '1',
+    i_en => not w_MemFreeze,
     i_flush => w_EM_flush, --replace with flush expression
     -- Input control signals
     i_WB => w_DE_WB_2,
@@ -684,7 +692,9 @@ BEGIN
     o_return => w_MemReturn,
     o_interruptType => w_MeminterruptType,
     o_flush => w_MemFlush,
-    o_freeze => w_MemFreeze
+    o_freeze => w_MemFreeze,
+    o_pop_flag => w_M_pop_flags,
+    o_flag => w_M_flag
   );
 
   MW : MEM_WB PORT MAP(

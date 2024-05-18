@@ -5,6 +5,8 @@ USE ieee.numeric_std.ALL;
 USE IEEE.std_logic_signed.ALL;
 ENTITY FlagRegister IS PORT (
     i_clk, i_rst : IN STD_LOGIC;
+    i_pop_flags : IN STD_LOGIC;
+    i_mem_flags : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
     i_aluOp, i_flags : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
     i_branchControl : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
     o_flags : OUT STD_LOGIC_VECTOR(3 DOWNTO 0) --[3]overflow,[2]carry,[1]neg,[0]zero
@@ -26,6 +28,9 @@ BEGIN
         ELSIF rising_edge(i_clk) THEN
             IF i_branchControl = "10" THEN
                 flags(0) <= '0';
+            END IF;
+            IF i_pop_flags = '1' THEN
+                flags <= i_mem_flags;
             END IF;
         END IF;
     END PROCESS;
