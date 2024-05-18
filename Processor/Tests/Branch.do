@@ -52,7 +52,7 @@ add wave -position end  sim:/processor/DE/o_pc
 add wave -position end  sim:/processor/DE/i_pc
 add wave -position end  sim:/processor/DE/i_flush
 
-mem load -i D:/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
+mem load -i D:/gam3a/arch/Pipelined-Processor-with-Assembler/Assembler/instructions.mem /processor/F/instruction_memory/r_mem
 
 force -freeze sim:/processor/i_clk 1 0, 0 {5 ps} -r {10 ps}
 
@@ -80,4 +80,7 @@ force -freeze sim:/processor/i_port 00000000000000000000000001100000 0
 run 40 ps
 force -freeze sim:/processor/i_port 00000000000000000000000001110000 0
 # 230 ps
+run 140 ps
+#390 ps
+force -freeze sim:/processor/i_port x\"00000700\" 0
 run 3000 ps
